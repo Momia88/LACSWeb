@@ -14,6 +14,7 @@
 <script src="js/jquery-ui.js"></script>
 <script src="js/math.min.js"></script>
 <script src="js/Chart.js"></script>
+
 <!--Icons-->
 <script src="js/lumino.glyphs.js"></script>
 
@@ -35,7 +36,6 @@ input {
 
 <body>
 	<div id="loading" style="display: none"></div>
-
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -69,28 +69,58 @@ input {
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<div id="chartInfo">
-				<form action=chartView.html method="post">
-					<label>日期查詢：</label> <input type="text" id="startdatepicker"
-						required="required"> ~ <input type="text"
-						id="enddatepicker" required="required"><label>Model
-						Type:</label> <input type="text" id="modelType" required="required">
-					<label>Chart Type :</label> <select id="chartType"
-						required="required">
-						<option value="brightness">Brightness</option>
-						<option value="delta_uv">Delta UV</option>
-						<option value="cct">cct</option>
-						<option value="contrast_ratio">Contrast Ratio</option>
-						<option value="white_color_p9">White 9 Point</option>
-						<option value="white_color_distribution">White Distribution</option>
-					</select> <br /> <label>上限: </label><input type="text" id="uslValue">
-					<label>下限:</label><input type="text" id="lslValue"> <label>標準:</label><input
-						type="text" id="specValue"> <input onclick="saveData()"
-						type="submit" id="sumitBtn" value="提交" />
-				</form>
+				<label>日期查詢：</label> <input type="text" id="startdatepicker">
+				~ <input type="text" id="enddatepicker"><label>Model
+					Type:</label> <input type="text" id="modelType"> <label>Chart
+					Type :</label> <select id="chartType">
+					<option value="brightness">Brightness</option>
+					<option value="delta_uv">Delta UV</option>
+					<option value="cct">cct</option>
+					<option value="contrast_ratio">Contrast Ratio</option>
+					<option value="white_color_p9">White 9 Point</option>
+					<option value="white_color_distribution">White Distribution</option>
+				</select> <br /> <label>上限: </label><input type="text" id="uslValue">
+				<label>下限:</label><input type="text" id="lslValue"> <label>標準:</label><input
+					type="text" id="specValue"> <input type="submit"
+					id="sumitBtn" value="提交" />
+			</div>
+		</div>
+		<!--/.row-->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Bar Chart</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<canvas class="main-chart" id="bar-chart" height="200"
+								width="600"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/.row-->
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Line Chart</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<canvas class="main-chart" id="line-chart" height="200"
+								width="600"></canvas>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<!--/.row-->
 	</div>
+	<!--/.main-->
+
+	<script src="js/ChartConfig.js"></script>
+	<script src="js/Utils.js"></script>
+	<script src="js/bubbleChart.js"></script>
 
 	<script>
 		$(function() {
@@ -101,28 +131,9 @@ input {
 				dateFormat : 'yy-mm-dd'
 			});
 		});
-	</script>
-	<script src="js/ChartConfig.js"></script>
-	<script src="js/Utils.js"></script>
-	<script>
-		function saveData() {
-			var _mType = document.getElementById("modelType").value;
-			var _cType = document.getElementById("chartType").value;
-			var _sTime = document.getElementById("startdatepicker").value;
-			var _eTime = document.getElementById("enddatepicker").value;
-			// 平均線位置
-			var _uslValue = document.getElementById("uslValue").value;
-			var _lslValue = document.getElementById("lslValue").value;
-			var _specValue = document.getElementById("specValue").value;
-
-			sessionStorage.setItem('mType', _mType);
-			sessionStorage.setItem('cType', _cType);
-			sessionStorage.setItem('sTime', _sTime);
-			sessionStorage.setItem('eTime', _eTime);
-			sessionStorage.setItem('uslValue', _uslValue);
-			sessionStorage.setItem('lslValue', _lslValue);
-			sessionStorage.setItem('specValue', _specValue);
-		}
+		$('#sumitBtn').click(function drawChart() {
+			drawBarChart("bar-chart");
+		});
 	</script>
 </body>
 

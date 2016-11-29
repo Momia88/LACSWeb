@@ -30,13 +30,15 @@ Date.prototype.dateDiff = function(interval, objDate) {
 	case "w":
 		return parseInt((dtEnd - this) / (86400000 * 7));
 	case "m":
-		return (dtEnd.getMonth() + 1) + ((dtEnd.getFullYear() - this.getFullYear()) * 12) - (this.getMonth() + 1);
+		return (dtEnd.getMonth() + 1)
+				+ ((dtEnd.getFullYear() - this.getFullYear()) * 12)
+				- (this.getMonth() + 1);
 	case "y":
 		return dtEnd.getFullYear() - this.getFullYear();
 	}
 };
 
-$('#sumitBtn').click(function drawBarChart() {
+function drawBarChart(canvasId) {
 	var mType = "DHD850";
 	var cType = "brightness";
 	var sTime = document.getElementById("startdatepicker").value;
@@ -50,7 +52,8 @@ $('#sumitBtn').click(function drawBarChart() {
 		return;
 	}
 	jsonData = $.ajax({
-		// url : 'http://192.168.3.88:8080/LACSProj/api/v1/service/chroma',
+		// url :
+		// 'http://192.168.3.88:8080/LACSProj/api/v1/service/chroma',
 		url : 'http://localhost:8080/LACSProj/api/v1/service/chroma',
 		type : "POST",
 		data : {
@@ -86,18 +89,14 @@ $('#sumitBtn').click(function drawBarChart() {
 			var avgValue = chartJsonData.avgValue;
 			var stdValue = chartJsonData.stdValue;
 
-			document.getElementById('maxlight').innerHTML = maxValue;
-			document.getElementById('minlight').innerHTML = minValue;
-			document.getElementById('average').innerHTML = avgValue;
-			document.getElementById('standard').innerHTML = 0;
-
 			// Chart Setting
-			var avgIndex = (avgValue - minValue) / (maxValue - minValue) * 10 + 2;
+			var avgIndex = (avgValue - minValue) / (maxValue - minValue) * 10
+					+ 2;
 
 			var bubbleData = {
-				datasets : [{
+				datasets : [ {
 					label : 'First Dataset',
-					data : [{
+					data : [ {
 						x : 0.2938,
 						y : 0.3130,
 						r : 2
@@ -161,10 +160,10 @@ $('#sumitBtn').click(function drawBarChart() {
 						x : 0.2976,
 						y : 0.3245,
 						r : 2
-					}],
+					} ],
 					backgroundColor : "#FF6384",
 					hoverBackgroundColor : "#FF6384",
-				}],
+				} ],
 			};
 
 			var options = {
@@ -180,19 +179,19 @@ $('#sumitBtn').click(function drawBarChart() {
 					}
 				},
 				scales : {
-					xAxes : [{
+					xAxes : [ {
 						ticks : {
 							suggestedMin : 0.27,
 							suggestedMax : 0.32,
 						}
-					}],
-					yAxes : [{
+					} ],
+					yAxes : [ {
 
 						ticks : {
 							suggestedMin : 0.29,
 							suggestedMax : 0.34,
 						}
-					}]
+					} ]
 				},
 			};
 
@@ -220,25 +219,32 @@ $('#sumitBtn').click(function drawBarChart() {
 						ctx.textBaseline = "bottom";
 						ctx.save();
 						ctx.beginPath();
-						ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top);
+						ctx.moveTo(xaxis.getPixelForValue(undefined, index),
+								yaxis.top);
 						ctx.strokeStyle = '#FF0000';
-						ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
+						ctx.lineTo(xaxis.getPixelForValue(undefined, index),
+								yaxis.bottom);
 						ctx.stroke();
 						ctx.restore();
-						ctx.fillText(avgValue, xaxis.getPixelForValue(undefined, index), yaxis.top);
+						ctx.fillText(avgValue, xaxis.getPixelForValue(
+								undefined, index), yaxis.top);
 
 					}
 				}
 			});
 
-			var ctx = document.getElementById("myChart");
+			var ctx = document.getElementById(canvasId);
 			var myChart = new Chart(ctx, config);
 
 		},
-
+		beforeSend : function() {
+			$('#loading').show();
+		},
+		complete : function() {
+			$('#loading').hide();
+		},
 		error : function() {
 			alert("ERROR!!!");
 		}
 	});
-});
-
+};
