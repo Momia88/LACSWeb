@@ -47,9 +47,10 @@
 		<div class="row">
 			<div class="col-md-6">
 				<div class="panel panel-default">
-					<div class="panel-heading">Basic Table</div>
+					<div class="panel-heading">Styled Table</div>
 					<div class="panel-body">
-						<table id="tb_report" data-toggle="table" data-url="data/data2.json">
+						<table data-toggle="table" id="table-style"
+							data-row-style="rowStyle">
 							<thead>
 								<tr>
 									<th data-field="id" data-align="right">Item ID</th>
@@ -62,14 +63,6 @@
 				</div>
 			</div>
 		</div>
-
-		<script type="text/javascript">
-			$('#tb_report').bootstrapTable({
-				showExport : true, //是否顯示導出
-				exportDataType : "basic", //basic', 'all', 'selected'.
-
-			});
-		</script>
 		<!--/.row-->
 
 

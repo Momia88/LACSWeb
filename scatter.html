@@ -54,31 +54,25 @@ input {
 		</div>
 	</nav>
 
-	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
-		<ul class="nav menu">
-			<li class="active"><a href="charts.html"><svg
-						class="glyph stroked line-graph">
-						<use xlink:href="#stroked-line-graph"></use></svg> Charts</a></li>
-			<li><a href="user.html"><svg class="glyph stroked male-user">
-						<use xlink:href="#stroked-male-user"></use></svg> User Page</a></li>
-		</ul>
-
-	</div>
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar"></div>
+	<script>
+		$(function() {
+			$("#sidebar-collapse").load("menu.html");
+		});
+	</script>
 	<!--/.sidebar-->
 
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<div id="chartInfo">
 				<label>日期查詢：</label> <input type="text" id="startdatepicker">
-				~ <input type="text" id="enddatepicker"><label>Model
+				~ <input type="text" id="enddatepicker"><br /><label>Model
 					Type:</label> <input type="text" id="modelType"> <label>Chart
 					Type :</label> <select id="chartType">
-					<option value="brightness">Brightness</option>
-					<option value="delta_uv">Delta UV</option>
-					<option value="cct">cct</option>
-					<option value="contrast_ratio">Contrast Ratio</option>
-					<option value="white_color_p9">White 9 Point</option>
-					<option value="white_color_distribution">White Distribution</option>
+					<option value="whitecolordist">White Color Point Distribution</option>
+					<option value="redcolordist">Red Color Point Distribution</option>
+					<option value="greencolordist">Green Color Point Distribution</option>
+					<option value="bluecolordist">Blue Color Point Distribution</option>
 				</select> <br /> <label>上限: </label><input type="text" id="uslValue">
 				<label>下限:</label><input type="text" id="lslValue"> <label>標準:</label><input
 					type="text" id="specValue"> <input type="submit"

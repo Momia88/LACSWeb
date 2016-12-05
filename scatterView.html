@@ -65,7 +65,7 @@ input {
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<div id="chartInfo">
-				<form action=chartView.html method="post">
+				<form action=scatterView.html method="post">
 					<label>日期查詢：</label> <input type="text" id="startdatepicker"
 						required="required"> ~ <input type="text"
 						id="enddatepicker" required="required"><label>Model
@@ -100,6 +100,8 @@ input {
 	</script>
 	<script src="js/ChartConfig.js"></script>
 	<script src="js/Utils.js"></script>
+	<script src="js/bubbleChart.js"></script>
+	
 	<script>
 		function saveData() {
 			var _mType = document.getElementById("modelType").value;
