@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Charts</title>
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-table.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/jquery-ui.css" rel="stylesheet">
+<link href="css/loading.css" rel="stylesheet">
+
+<link href="css/bootstrap-theme.css" rel="stylesheet">
+<link href="css/tableexport.css" rel="stylesheet">
+
+<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/math.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/bootstrap-table.js"></script>
+<script type="text/javascript" src="js/bootstrap-table-export.js"></script>
+<script type="text/javascript" src="js/xlsx.core.min.js"></script>
+<script type="text/javascript" src="js/Blob.js"></script>
+<script type="text/javascript" src="js/FileSaver.js"></script>
+<script type="text/javascript" src="js/Export2Excel.js"></script>
+<script type="text/javascript" src="js/tableexport.js"></script>
+
+<!--Icons-->
+<script src="js/lumino.glyphs.js"></script>
+
+<style type="text/css">
+#chartInfo {
+	margin: 15px;
+}
+
+input {
+	margin: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+</style>
+
+</head>
+
+<body>
+	<div id="loading" style="display: none"></div>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">LACS DashBoard</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right"><a href="index.html"
+						class="dropdown-toggle" data-toggle="dropdown">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar"></div>
+	<script>
+		$(function() {
+			$("#sidebar-collapse").load("menu.html");
+		});
+	</script>
+	<!--/.sidebar-->
+
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<div class="row">
+			<div id="chartInfo">
+				<form action=testerView.html method="post">
+					<label>日期查詢：</label> <input type="text" id="startdatepicker"
+						required="required"> ~ <input type="text"
+						id="enddatepicker" required="required"> <br /> <label>Model
+						Type:</label> <input type="text" id="modelType" required="required">
+					<label>Site:</label> <input type="text" id="siteNum"
+						required="required"> <input onclick="saveData()"
+						type="submit" id="sumitBtn" value="提交" />
+				</form>
+			</div>
+		</div>
+		<!--/.row-->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">HPBU Log</div>
+					<div class="panel-body">
+						<table id="table"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/.row-->
+	</div>
+	<!--/.main-->
+
+	<script>
+		$(function() {
+			$("#startdatepicker").datepicker({
+				dateFormat : 'yy-mm-dd'
+			});
+			$("#enddatepicker").datepicker({
+				dateFormat : 'yy-mm-dd'
+			});
+		});
+	</script>
+	<script src="js/Utils.js"></script>
+	<script>
+		function saveData() {
+			var _mType = document.getElementById("modelType").value;
+			var _siteNum = document.getElementById("siteNum").value;
+			var _sTime = document.getElementById("startdatepicker").value;
+			var _eTime = document.getElementById("enddatepicker").value;
+
+			sessionStorage.setItem('mType', _mType);
+			sessionStorage.setItem('siteNum', _siteNum);
+			sessionStorage.setItem('sTime', _sTime);
+			sessionStorage.setItem('eTime', _eTime);
+		}
+
+		window.onload = function() {
+			// init params
+			var mType = sessionStorage.getItem("mType");
+			var siteNum = sessionStorage.getItem("siteNum");
+			var sTime = sessionStorage.getItem("sTime");
+			var eTime = sessionStorage.getItem("eTime");
+
+			document.getElementById("modelType").value = mType;
+			document.getElementById("siteNum").value = siteNum;
+			document.getElementById("startdatepicker").value = sTime;
+			document.getElementById("enddatepicker").value = eTime;
+
+			var titleStr = mType + "_" + sTime + "_" + eTime +"_s" + siteNum;
+			var s = new Date(sTime);
+			var e = new Date(eTime);
+			if (s.dateDiff("m", e) > 12 || s.dateDiff("m", e) == null) {
+				alert("日期錯誤或超過12個月!");
+				return;
+			}
+			jsonData = $.ajax({
+				//url : 'http://192.168.3.88:8080/LACSProj/api/v1/service/chroma',
+				url : 'http://localhost:8080/LACSProj/api/v1/service/testerlog',
+				type : "POST",
+				data : {
+					modelType : mType,
+					siteNum : siteNum,
+					startTime : sTime,
+					endTime : eTime
+				},
+				dataType : 'json',
+				success : function(jsonData) {
+					// Split timestamp and data into
+					// separate arrays
+					if (jsonData == null) {
+						alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
+						return;
+					}
+					var columnList = jsonData.titleList;
+					var recordList = jsonData.recordList;
+					if (columnList == "" || recordList == "") {
+						alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
+						return;
+					}
+					$('#table').bootstrapTable({
+						onClickRow:function (row, $element) {
+							alert(jsonData.recordList[$element.index()].WSN);
+					    },
+						columns : columnList,
+						data : recordList
+					});
+				},
+				beforeSend : function() {
+					$('#loading').show();
+				},
+				complete : function() {
+					$('#loading').hide();
+					dataExport(titleStr);
+				},
+				error : function() {
+					alert("ERROR!!!");
+				}
+			});
+		};
+
+		var drawLine = function(chart, index, value, lineDash, lineColor,
+				offset) {
+			if (index) {
+				var ctx = chart.chart.ctx;
+				var xaxis = chart.scales['x-axis-0'];
+				var yaxis = chart.scales['y-axis-0'];
+				if (lineDash) {
+					ctx.setLineDash([ 5, 5 ]);
+				} else {
+					ctx.setLineDash([ 0, 0 ]);
+				}
+				ctx.save();
+				ctx.beginPath();
+				ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top
+						- offset);
+				ctx.strokeStyle = lineColor;
+				ctx.lineTo(xaxis.getPixelForValue(undefined, index),
+						yaxis.bottom);
+				var x = xaxis.getPixelForValue(undefined, index);
+				var y = yaxis.top;
+				ctx.textAlign = "center";
+				ctx.textBaseline = "bottom";
+				ctx.font = "14px Arial";
+				ctx.fillStyle = lineColor;
+				ctx.fillText(value, x, y - offset);
+				ctx.stroke();
+				ctx.restore();
+			}
+		};
+
+		function dataExport(titleStr) {
+			$("table").tableExport({
+				addClass : "", // [String], additional button classes to add, [default: ""]
+				buttonContent : "Export", // [String], text/html to display in the export button, [default: "Export file"]
+				bootstrap : true, // (Boolean), style buttons using bootstrap
+				defaultClass : "btn", // [String], the default button class, [default: "btn"]
+				defaultTheme : "btn-default", // [String], the default button theme, [default: "btn-default"]
+				footers : true, // (Boolean), display table footers (th/td elements) in the <tfoot>
+				formats : [ "xlsx", "xls", "csv", "txt" ], // (String[]), filetypes for the export
+				fileName : titleStr, // [id, name, String], filename for the downloaded file, [default: "export"]
+				headings : true, // [Boolean], display table headings (th elements) in the first row, [default: true]
+				ignoreRows : null, // (Number, Number[]), row indices to exclude from the exported file
+				ignoreCols : null, // (Number, Number[]), column indices to exclude from the exported file
+				ignoreCSS : ".tableexport-ignore", // (selector, selector[]), selector(s) to exclude from the exported file
+				position : "bottom", // [top, bottom], position of the caption element relative to table, [default: "bottom"]
+				position : "bottom", // (top, bottom), position of the caption element relative to table
+				stripQuotes : true, // [Boolean], remove containing double quotes (.txt files ONLY), [default: true]
+				separator : ",", // [String] column separator, [default: ","]
+			});
+		}
+	</script>
+</body>
+
+</html>

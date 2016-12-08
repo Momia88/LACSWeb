@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Charts</title>
 
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/styles.css" rel="stylesheet">
 <link href="css/jquery-ui.css" rel="stylesheet">
 <link href="css/loading.css" rel="stylesheet">
@@ -14,12 +14,20 @@
 <script src="js/jquery-ui.js"></script>
 <script src="js/math.min.js"></script>
 <script src="js/Chart.js"></script>
+<script src="js/jspdf.min.js"></script>
 <!--Icons-->
 <script src="js/lumino.glyphs.js"></script>
 
 <style type="text/css">
 #chartInfo {
 	margin: 15px;
+}
+
+canvas {
+	background-color: #FFFFFF;
+	background: #FFFFFF;
+	height: "200";
+	width: "600";
 }
 
 input {
@@ -66,10 +74,12 @@ input {
 		<div class="row">
 			<div id="chartInfo">
 				<form action=chartView.html method="post">
-					<label>日期查詢：</label> <input type="text" id="startdatepicker" required="required">
-					~ <input type="text" id="enddatepicker" required="required"><label>Model
-						Type:</label> <input type="text" id="modelType" required="required"> <label>Chart
-						Type :</label> <select id="chartType" required="required">
+					<label>日期查詢：</label> <input type="text" id="startdatepicker"
+						required="required"> ~ <input type="text"
+						id="enddatepicker" required="required"><label>Model
+						Type:</label> <input type="text" id="modelType" required="required">
+					<label>Chart Type :</label> <select id="chartType"
+						required="required">
 						<option value="brightness">Brightness</option>
 						<option value="delta_uv">Delta UV</option>
 						<option value="cct">cct</option>
@@ -89,15 +99,16 @@ input {
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">Bar Chart</div>
-					<div class="panel-body">
-						<div class="canvas-wrapper">
-							<canvas class="main-chart" id="bar-chart" height="200"
-								width="600"></canvas>
+					<div id="chart-content" class="panel-body">
+						<div id="panel" class="canvas-wrapper">
+							<canvas id="bar-chart" class="main-chart"></canvas>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<button type="button" id="download-pdf">Download PDF</button>
+
 		<!--/.row-->
 		<div class="row">
 			<div class="col-lg-12">
@@ -105,8 +116,7 @@ input {
 					<div class="panel-heading">Line Chart</div>
 					<div class="panel-body">
 						<div class="canvas-wrapper">
-							<canvas class="main-chart" id="line-chart" height="200"
-								width="600"></canvas>
+							<canvas id="line-chart" class="main-chart"></canvas>
 						</div>
 					</div>
 				</div>
@@ -115,8 +125,25 @@ input {
 		<!--/.row-->
 	</div>
 	<!--/.main-->
+	<script type="text/javascript">
+		//donwload pdf from original canvas
+		function downloadPDF() {
+			var canvas = document.querySelector('#bar-chart');
+			//creates image
+			var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
 
+			//creates PDF from img
+			var doc = new jsPDF('landscape');
+			doc.setFontSize(20);
+			doc.text(15, 15, "Bar Chart");
+			doc.addImage(canvasImg, 'PNG', 10, 10, 280, 150);
+			doc.save('canvas.pdf');
+		}
 
+		//add event listener to 2nd button
+		document.getElementById('download-pdf').addEventListener("click",
+				downloadPDF);
+	</script>
 	<script>
 		$(function() {
 			$("#startdatepicker").datepicker({
@@ -284,6 +311,10 @@ input {
 
 							canvas = document.getElementById('bar-chart');
 							var ctx = canvas.getContext("2d");
+							ctx.clearRect( 0 , 0 , canvas.width, canvas.height );
+							ctx.fillStyle="#FFFFFF";
+							ctx.fillRect(0 , 0 , canvas.width, canvas.height);
+							
 							window.bar = new Chart(ctx, config);
 							config.type = "line";
 							var linectx = document.getElementById('line-chart');
@@ -291,27 +322,23 @@ input {
 
 							// show average line
 							var originalLineDraw = Chart.controllers.bar.prototype.draw;
-							Chart.helpers
-									.extend(Chart.controllers.bar.prototype,
-											{
-												draw : function() {
-													originalLineDraw.apply(
-															this, arguments);
-													var chart = this.chart;
-													drawLine(chart, avgIndex,
-															avgValue, false,
-															"#FF0000",12);
-													drawLine(chart, uslIndex,
-															uslValue, true,
-															"#000000",0);
-													drawLine(chart, lslIndex,
-															lslValue, true,
-															"#000000",0);
-													drawLine(chart, specIndex,
-															specValue, true,
-															"#000000",0);
-												}
-											});
+							Chart.helpers.extend(
+									Chart.controllers.bar.prototype, {
+										draw : function() {
+											originalLineDraw.apply(this,
+													arguments);
+											var chart = this.chart;
+											drawLine(chart, avgIndex, avgValue,
+													false, "#FF0000", 12);
+											drawLine(chart, uslIndex, uslValue,
+													true, "#000000", 0);
+											drawLine(chart, lslIndex, lslValue,
+													true, "#000000", 0);
+											drawLine(chart, specIndex,
+													specValue, true, "#000000",
+													0);
+										}
+									});
 
 						},
 
@@ -340,7 +367,8 @@ input {
 				}
 				ctx.save();
 				ctx.beginPath();
-				ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top - offset);
+				ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top
+						- offset);
 				ctx.strokeStyle = lineColor;
 				ctx.lineTo(xaxis.getPixelForValue(undefined, index),
 						yaxis.bottom);
