@@ -94,10 +94,9 @@ input {
 	<script>
 		function saveData() {
 			var _mType = document.getElementById("modelType").value;
-			var _siteType = document.getElementById("siteNum").value;
+			var _siteNum = document.getElementById("siteNum").value;
 			var _sTime = document.getElementById("startdatepicker").value;
 			var _eTime = document.getElementById("enddatepicker").value;
-
 			sessionStorage.setItem('mType', _mType);
 			sessionStorage.setItem('siteNum', _siteNum);
 			sessionStorage.setItem('sTime', _sTime);
