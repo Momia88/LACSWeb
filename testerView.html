@@ -24,7 +24,8 @@
 <script type="text/javascript" src="js/Blob.js"></script>
 <script type="text/javascript" src="js/FileSaver.js"></script>
 <!-- <script type="text/javascript" src="js/Export2Excel.js"></script>
- --><script type="text/javascript" src="js/tableexport.js"></script>
+ -->
+<script type="text/javascript" src="js/tableexport.js"></script>
 
 <!--Icons-->
 <script src="js/lumino.glyphs.js"></script>
@@ -179,8 +180,9 @@ input {
 							}
 							var columnList = jsonData.titleList;
 							var recordList = jsonData.recordList;
-							var keyDescriptions = jsonData.keyDescriptions;
-							
+							var commDescriptionPair = jsonData.commDescriptionPair;
+							var commResultPair = jsonData.commResultPair;
+
 							if (columnList == "" || recordList == "") {
 								alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
 								return;
@@ -188,17 +190,24 @@ input {
 							$('#table')
 									.bootstrapTable(
 											{
-												onClickRow : function(row,
-														$element) {
+												onClickRow : function(row,$element) {
 													//alert(jsonData.recordList[$element.index()].WSN);
 													var datalist = getDetailList(
-															columnList,keyDescriptions,
-															recordList[$element
-																	.index()]);
+															columnList,commDescriptionPair,commResultPair,row);
 													detailTable(datalist);
 												},
 												columns : columnList,
-												data : recordList
+												data : recordList,
+												rowStyle:function rowStyle(row, index) {												
+													if(row.SITE_RESULT == "F" ){
+													  return {
+														    css: {"color": "red"}
+														  };
+													}
+													return  {
+													    css: {"color": "black"}
+													  };;
+												},
 											});
 
 							$('#detailtable').bootstrapTable({
@@ -216,6 +225,16 @@ input {
 									title : 'Result'
 								} ],
 								data : [],
+								rowStyle:function rowStyle(row, index) {												
+									if(row.Result == "F" ){
+									  return {
+										    css: {"color": "red"}
+										  };
+									}
+									return  {
+									    css: {"color": "black"}
+									  };;
+								},
 							});
 						},
 						beforeSend : function() {
@@ -231,15 +250,18 @@ input {
 					});
 		};
 
-		function getDetailList(columnList,keyDescriptions, jsonObj) {
+		function getDetailList(columnList,commDescriptionPair,commResultPair,row) {
 			var list = [];
 			for (i = 0; i < columnList.length; i++) { 
-				var detail = new DetailObj;
 				var key = columnList[i].title;
-				detail.Command = key;
-				detail.Description = keyDescriptions[key];
-				detail.TestingValue = jsonObj[key];
-				list.push(detail);
+				if(row[key] != null){
+					var detail = new DetailObj;
+					detail.Command = key;
+					detail.Description = commDescriptionPair[key];
+					detail.TestingValue = row[key];
+					detail.Result = commResultPair[key];
+					list.push(detail);
+				}
 			}
 			return list;
 		};
