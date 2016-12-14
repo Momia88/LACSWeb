@@ -23,6 +23,8 @@
 <script type="text/javascript" src="js/xlsx.core.min.js"></script>
 <script type="text/javascript" src="js/Blob.js"></script>
 <script type="text/javascript" src="js/FileSaver.js"></script>
+<script src="js/Variables.js"></script>
+
 <!-- <script type="text/javascript" src="js/Export2Excel.js"></script>
  -->
 <script type="text/javascript" src="js/tableexport.js"></script>
@@ -82,7 +84,7 @@ input {
 					<label>日期查詢：</label> <input type="text" id="startdatepicker"
 						required="required"> ~ <input type="text"
 						id="enddatepicker" required="required"> <br /> <label>Model
-						Type:</label> <input type="text" id="modelType" required="required">
+						Type:</label> <input type="text" id="modelType">
 					<label>Site:</label> <input type="text" id="siteNum"
 						required="required"> <input onclick="saveData()"
 						type="submit" id="sumitBtn" value="提交" />
@@ -161,8 +163,7 @@ input {
 			}
 			jsonData = $
 					.ajax({
-						//url : 'http://192.168.3.88:8080/LACSProj/api/v1/service/chroma',
-						url : 'http://localhost:8080/LACSProj/api/v1/service/testerlog',
+						url : serverIP + '/LACSProj/api/v1/service/testerlog',
 						type : "POST",
 						data : {
 							modelType : mType,
