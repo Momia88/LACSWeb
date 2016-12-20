@@ -1,8 +1,7 @@
 /*
-Lumino Admin Bootstrap Template
-Version 1.0
-*/
-
+ Lumino Admin Bootstrap Template
+ Version 1.0
+ */
 
 /*Global Styles*/
 
@@ -46,17 +45,32 @@ h3, h4 {
 	color: #9fadbb;
 }
 
-.color-gray { color: #5f6468; }
-.color-blue { color: #30a5ff; }
-.color-teal { color: #1ebfae; }
-.color-orange { color: #ffb53e; }
-.color-red { color: #f9243f; }
+.color-gray {
+	color: #5f6468;
+}
+.color-blue {
+	color: #30a5ff;
+}
+.color-teal {
+	color: #1ebfae;
+}
+.color-orange {
+	color: #ffb53e;
+}
+.color-red {
+	color: #f9243f;
+}
 
-.bg-primary .glyphicon-remove { color: #5f6468;}
-.bg-primary .glyphicon-remove:hover { color: #ef4040;}
+.bg-primary .glyphicon-remove {
+	color: #5f6468;
+}
+.bg-primary .glyphicon-remove:hover {
+	color: #ef4040;
+}
 
 .no-padding {
-	padding: 0; margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 .glyphicon-xl {
@@ -100,139 +114,37 @@ h3, h4 {
 
 /*Buttons*/
 
-a.btn:hover,
-button:hover {
+a.btn:hover, button:hover {
 	opacity: 0.8;
 }
 
-a.btn:active,
-button:active {
+a.btn:active, button:active {
 	box-shadow: inset 0px 0px 500px rgba(0,0,0,.1);
 	opacity: 1;
 }
 
-.btn-default,
-.btn-default:hover,
-.btn-default:focus,
-.btn-default:active,
-.btn-default.active,
-.open > .dropdown-toggle.btn-default,
-.btn-default.disabled,
-.btn-default[disabled],
-fieldset[disabled] .btn-default,
-.btn-default.disabled:hover,
-.btn-default[disabled]:hover,
-fieldset[disabled] .btn-default:hover,
-.btn-default.disabled:focus,
-.btn-default[disabled]:focus,
-fieldset[disabled] .btn-default:focus,
-.btn-default.disabled:active,
-.btn-default[disabled]:active,
-fieldset[disabled] .btn-default:active,
-.btn-default.disabled.active,
-.btn-default[disabled].active,
-fieldset[disabled] .btn-default.active {
+.btn-default, .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default, .btn-default.disabled, .btn-default[disabled], fieldset[disabled] .btn-default, .btn-default.disabled:hover, .btn-default[disabled]:hover, fieldset[disabled] .btn-default:hover, .btn-default.disabled:focus, .btn-default[disabled]:focus, fieldset[disabled] .btn-default:focus, .btn-default.disabled:active, .btn-default[disabled]:active, fieldset[disabled] .btn-default:active, .btn-default.disabled.active, .btn-default[disabled].active, fieldset[disabled] .btn-default.active {
 	background-color: #e9ecf2;
 	border-color: #e9ecf2;
 	color: #1b3548;
 }
 
-.btn-primary,
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active,
-.btn-primary.active,
-.open > .dropdown-toggle.btn-primary,
-.btn-primary.disabled,
-.btn-primary[disabled],
-fieldset[disabled] .btn-primary,
-.btn-primary.disabled:hover,
-.btn-primary[disabled]:hover,
-fieldset[disabled] .btn-primary:hover,
-.btn-primary.disabled:focus,
-.btn-primary[disabled]:focus,
-fieldset[disabled] .btn-primary:focus,
-.btn-primary.disabled:active,
-.btn-primary[disabled]:active,
-fieldset[disabled] .btn-primary:active,
-.btn-primary.disabled.active,
-.btn-primary[disabled].active,
-fieldset[disabled] .btn-primary.active {
+.btn-primary, .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary, .btn-primary.disabled, .btn-primary[disabled], fieldset[disabled] .btn-primary, .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled:active, .btn-primary[disabled]:active, fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary.active {
 	background-color: #30a5ff;
 	border-color: #30a5ff;
 }
 
-.btn-success,
-.btn-success:hover,
-.btn-success:focus,
-.btn-success:active,
-.btn-success.active,
-.open > .dropdown-toggle.btn-success,
-.btn-success.disabled,
-.btn-success[disabled],
-fieldset[disabled] .btn-success,
-.btn-success.disabled:hover,
-.btn-success[disabled]:hover,
-fieldset[disabled] .btn-success:hover,
-.btn-success.disabled:focus,
-.btn-success[disabled]:focus,
-fieldset[disabled] .btn-success:focus,
-.btn-success.disabled:active,
-.btn-success[disabled]:active,
-fieldset[disabled] .btn-success:active,
-.btn-success.disabled.active,
-.btn-success[disabled].active,
-fieldset[disabled] .btn-success.active {
+.btn-success, .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open > .dropdown-toggle.btn-success, .btn-success.disabled, .btn-success[disabled], fieldset[disabled] .btn-success, .btn-success.disabled:hover, .btn-success[disabled]:hover, fieldset[disabled] .btn-success:hover, .btn-success.disabled:focus, .btn-success[disabled]:focus, fieldset[disabled] .btn-success:focus, .btn-success.disabled:active, .btn-success[disabled]:active, fieldset[disabled] .btn-success:active, .btn-success.disabled.active, .btn-success[disabled].active, fieldset[disabled] .btn-success.active {
 	background-color: #8ad919;
 	border-color: #8ad919;
 }
 
-.btn-warning,
-.btn-warning:hover,
-.btn-warning:focus,
-.btn-warning:active,
-.btn-warning.active,
-.open > .dropdown-toggle.btn-warning,
-.btn-warning.disabled,
-.btn-warning[disabled],
-fieldset[disabled] .btn-warning,
-.btn-warning.disabled:hover,
-.btn-warning[disabled]:hover,
-fieldset[disabled] .btn-warning:hover,
-.btn-warning.disabled:focus,
-.btn-warning[disabled]:focus,
-fieldset[disabled] .btn-warning:focus,
-.btn-warning.disabled:active,
-.btn-warning[disabled]:active,
-fieldset[disabled] .btn-warning:active,
-.btn-warning.disabled.active,
-.btn-warning[disabled].active,
-fieldset[disabled] .btn-warning.active {
+.btn-warning, .btn-warning:hover, .btn-warning:focus, .btn-warning:active, .btn-warning.active, .open > .dropdown-toggle.btn-warning, .btn-warning.disabled, .btn-warning[disabled], fieldset[disabled] .btn-warning, .btn-warning.disabled:hover, .btn-warning[disabled]:hover, fieldset[disabled] .btn-warning:hover, .btn-warning.disabled:focus, .btn-warning[disabled]:focus, fieldset[disabled] .btn-warning:focus, .btn-warning.disabled:active, .btn-warning[disabled]:active, fieldset[disabled] .btn-warning:active, .btn-warning.disabled.active, .btn-warning[disabled].active, fieldset[disabled] .btn-warning.active {
 	background-color: #ffb53e;
 	border-color: #ffb53e;
 }
 
-.btn-danger,
-.btn-danger:hover,
-.btn-danger:focus,
-.btn-danger:active,
-.btn-danger.active,
-.open > .dropdown-toggle.btn-danger,
-.btn-danger.disabled,
-.btn-danger[disabled],
-fieldset[disabled] .btn-danger,
-.btn-danger.disabled:hover,
-.btn-danger[disabled]:hover,
-fieldset[disabled] .btn-danger:hover,
-.btn-danger.disabled:focus,
-.btn-danger[disabled]:focus,
-fieldset[disabled] .btn-danger:focus,
-.btn-danger.disabled:active,
-.btn-danger[disabled]:active,
-fieldset[disabled] .btn-danger:active,
-.btn-danger.disabled.active,
-.btn-danger[disabled].active,
-fieldset[disabled] .btn-danger.active {
+.btn-danger, .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger, .btn-danger.disabled, .btn-danger[disabled], fieldset[disabled] .btn-danger, .btn-danger.disabled:hover, .btn-danger[disabled]:hover, fieldset[disabled] .btn-danger:hover, .btn-danger.disabled:focus, .btn-danger[disabled]:focus, fieldset[disabled] .btn-danger:focus, .btn-danger.disabled:active, .btn-danger[disabled]:active, fieldset[disabled] .btn-danger:active, .btn-danger.disabled.active, .btn-danger[disabled].active, fieldset[disabled] .btn-danger.active {
 	background-color: #f9243f;
 	border-color: #f9243f;
 }
@@ -327,8 +239,7 @@ a.bg-danger:hover {
 	margin: 0 -5px;
 }
 
-.panel-footer .input-group-btn:last-child>.btn, 
-.panel-footer .input-group-btn:last-child>.btn-group {
+.panel-footer .input-group-btn:last-child > .btn, .panel-footer .input-group-btn:last-child > .btn-group {
 	margin: 0;
 }
 
@@ -341,31 +252,34 @@ a.bg-danger:hover {
 	text-decoration: none;
 }
 
-.panel-blue { background: #30a5ff; color: #fff; }
-.panel-teal { background: #1ebfae; color: #fff; }
-.panel-orange { background: #ffb53e; color: #fff; }
-.panel-red { background: #f9243f; color: #fff; }
+.panel-blue {
+	background: #30a5ff;
+	color: #fff;
+}
+.panel-teal {
+	background: #1ebfae;
+	color: #fff;
+}
+.panel-orange {
+	background: #ffb53e;
+	color: #fff;
+}
+.panel-red {
+	background: #f9243f;
+	color: #fff;
+}
 
-.panel-blue .panel-body p,
-.panel-teal .panel-body p,
-.panel-orange .panel-body p,
-.panel-red .panel-body p { 
-	color: #fff; 
+.panel-blue .panel-body p, .panel-teal .panel-body p, .panel-orange .panel-body p, .panel-red .panel-body p {
+	color: #fff;
 	color: rgba(255, 255, 255, .8);
 }
 
-.panel-blue .panel-heading,
-.panel-teal .panel-heading,
-.panel-orange .panel-heading,
-.panel-red .panel-heading {
+.panel-blue .panel-heading, .panel-teal .panel-heading, .panel-orange .panel-heading, .panel-red .panel-heading {
 	border-bottom: 1px solid rgba(255, 255, 255, .2);
 }
 
-.panel-blue .text-muted,
-.panel-teal .text-muted,
-.panel-orange .text-muted,
-.panel-red .text-muted { 
-	color: rgba(255, 255, 255, .5); 
+.panel-blue .text-muted, .panel-teal .text-muted, .panel-orange .text-muted, .panel-red .text-muted {
+	color: rgba(255, 255, 255, .5);
 }
 
 .dark-overlay {
@@ -396,22 +310,22 @@ a.bg-danger:hover {
 
 @media (max-width: 768px) {
 	.widget-right {
-	width: 100%;
-	margin: 0;
-	text-align: center;
-	border-top-left-radius: 0px;
-	border-top-right-radius: 0px;
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
+		width: 100%;
+		margin: 0;
+		text-align: center;
+		border-top-left-radius: 0px;
+		border-top-right-radius: 0px;
+		border-bottom-left-radius: 4px;
+		border-bottom-right-radius: 4px;
 	}
 }
 
 @media (max-width: 768px) {
 	.widget-left {
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	border-bottom-left-radius: 0px;
-	border-bottom-right-radius: 0px;
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+		border-bottom-left-radius: 0px;
+		border-bottom-right-radius: 0px;
 	}
 }
 
@@ -422,10 +336,22 @@ a.bg-danger:hover {
 	color: #5f6468;
 }
 
-.panel-blue .widget-left { background: #30a5ff; color: #fff; }
-.panel-teal .widget-left { background: #1ebfae; color: #fff; }
-.panel-orange .widget-left { background: #ffb53e; color: #fff; }
-.panel-red .widget-left { background: #f9243f; color: #fff; }
+.panel-blue .widget-left {
+	background: #30a5ff;
+	color: #fff;
+}
+.panel-teal .widget-left {
+	background: #1ebfae;
+	color: #fff;
+}
+.panel-orange .widget-left {
+	background: #ffb53e;
+	color: #fff;
+}
+.panel-red .widget-left {
+	background: #f9243f;
+	color: #fff;
+}
 
 .panel-widget {
 	background: #fff;
@@ -455,10 +381,7 @@ a.bg-danger:hover {
 	background: #fff;
 }
 
-.nav-tabs li a,
-.nav-tabs li a:hover,
-.nav-tabs li.active a,
-.nav-tabs li.active a:hover {
+.nav-tabs li a, .nav-tabs li a:hover, .nav-tabs li.active a, .nav-tabs li.active a:hover {
 	border: 0;
 	padding: 15px 20px;
 }
@@ -468,23 +391,18 @@ a.bg-danger:hover {
 	padding-bottom: 0;
 }
 
-.nav-pills li a,
-.nav-pills li a:hover,
-.nav-pills li.active a,
-.nav-pills li.active a:hover {
+.nav-pills li a, .nav-pills li a:hover, .nav-pills li.active a, .nav-pills li.active a:hover {
 	border: 0;
 	padding: 7px 15px;
 }
 
-.nav-pills li.active a,
-.nav-pills li.active a:hover {
+.nav-pills li.active a, .nav-pills li.active a:hover {
 	background: #30a5ff;
 }
 
 .tab-content {
 	padding: 15px;
 }
-
 
 /*Navbar*/
 
@@ -541,7 +459,7 @@ a.bg-danger:hover {
 @media (min-width: 768px) {
 	.sidebar {
 		display: block;
-  		position: fixed;
+		position: fixed;
 		top: 50px;
 		bottom: 0;
 		left: 0;
@@ -550,7 +468,7 @@ a.bg-danger:hover {
 		margin: 0;
 		padding: 0;
 		overflow-x: hidden;
-		overflow-y: auto; 
+		overflow-y: auto;
 		background-color: #fff;
 		box-shadow: 1px 0px 10px rgba(0, 0, 0, .05);
 	}
@@ -559,21 +477,17 @@ a.bg-danger:hover {
 	}
 }
 
-.sidebar ul.nav a:hover, 
-.sidebar ul.nav li.parent ul li a:hover {
+.sidebar ul.nav a:hover, .sidebar ul.nav li.parent ul li a:hover {
 	text-decoration: none;
 	background-color: #e9ecf2;
 }
 
-.sidebar ul.nav .active a, .sidebar ul.nav li.parent a.active,
-.sidebar ul.nav .active > a:hover, .sidebar ul.nav li.parent a.active:hover,
-.sidebar ul.nav .active > a:focus, .sidebar ul.nav li.parent a.active:focus {
+.sidebar ul.nav .active a, .sidebar ul.nav li.parent a.active, .sidebar ul.nav .active > a:hover, .sidebar ul.nav li.parent a.active:hover, .sidebar ul.nav .active > a:focus, .sidebar ul.nav li.parent a.active:focus {
 	color: #fff;
 	background-color: #30a5ff;
 }*/
 
-.sidebar ul.nav ul,
-.sidebar ul.nav ul li {
+.sidebar ul.nav ul, .sidebar ul.nav ul li {
 	list-style: none;
 	list-style-type: none;
 }
@@ -588,21 +502,20 @@ a.bg-danger:hover {
 .sidebar ul.nav ul.children li a {
 	height: 40px;
 	background: #f9f9f9;
-	color: #30a5ff!important;
+	color: #30a5ff !important;
 }
 
 .sidebar ul.nav li.current a {
 	background-color: #30a5ff;
-	color: #fff!important;
+	color: #fff !important;
 }
 
 .sidebar ul.nav li.parent ul li a {
 	border: none;
-	display:block;
+	display: block;
 	padding-left: 30px;
 	line-height: 40px;
 }
-
 
 .sidebar span.glyphicon {
 	margin-right: 10px;
@@ -630,7 +543,7 @@ a.bg-danger:hover {
 	padding: 10px 15px;
 	background: #e9ecf2;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-	margin: 0 ;
+	margin: 0;
 }
 
 h1.page-header {
@@ -674,10 +587,18 @@ h1.page-header {
 	width: 120px;
 }
 
-#easypiechart-blue .percent { color: #30a5ff;}
-#easypiechart-teal .percent { color: #1ebfae;}
-#easypiechart-orange .percent { color: #ffb53e;}
-#easypiechart-red .percent { color: #ef4040;}
+#easypiechart-blue .percent {
+	color: #30a5ff;
+}
+#easypiechart-teal .percent {
+	color: #1ebfae;
+}
+#easypiechart-orange .percent {
+	color: #ffb53e;
+}
+#easypiechart-red .percent {
+	color: #ef4040;
+}
 
 /*Calendar Widget*/
 
@@ -689,45 +610,17 @@ h1.page-header {
 	width: 100%;
 }
 
-.datepicker table tr td.old,
-.datepicker table tr td.new {
+.datepicker table tr td.old, .datepicker table tr td.new {
 	color: rgba(255, 255, 255, .50);
 }
 
-.datepicker table tr td.active,
-.datepicker table tr td.active:hover,
-.datepicker table tr td.active.disabled,
-.datepicker table tr td.active.disabled:hover,
-.datepicker table tr td.active:hover,
-.datepicker table tr td.active:hover:hover,
-.datepicker table tr td.active.disabled:hover,
-.datepicker table tr td.active.disabled:hover:hover,
-.datepicker table tr td.active:focus,
-.datepicker table tr td.active:hover:focus,
-.datepicker table tr td.active.disabled:focus,
-.datepicker table tr td.active.disabled:hover:focus,
-.datepicker table tr td.active:active,
-.datepicker table tr td.active:hover:active,
-.datepicker table tr td.active.disabled:active,
-.datepicker table tr td.active.disabled:hover:active,
-.datepicker table tr td.active.active,
-.datepicker table tr td.active:hover.active,
-.datepicker table tr td.active.disabled.active,
-.datepicker table tr td.active.disabled:hover.active,
-.open .dropdown-toggle.datepicker table tr td.active,
-.open .dropdown-toggle.datepicker table tr td.active:hover,
-.open .dropdown-toggle.datepicker table tr td.active.disabled,
-.open .dropdown-toggle.datepicker table tr td.active.disabled:hover {
+.datepicker table tr td.active, .datepicker table tr td.active:hover, .datepicker table tr td.active.disabled, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:focus, .datepicker table tr td.active:hover:focus, .datepicker table tr td.active.disabled:focus, .datepicker table tr td.active.disabled:hover:focus, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .open .dropdown-toggle.datepicker table tr td.active, .open .dropdown-toggle.datepicker table tr td.active:hover, .open .dropdown-toggle.datepicker table tr td.active.disabled, .open .dropdown-toggle.datepicker table tr td.active.disabled:hover {
 	color: #ffffff;
 	background-color: rgba(0, 0, 0, .5);
 	border-color: #285e8e;
 }
 
-.datepicker table tr td span:hover,
-.datepicker thead tr:first-child th:hover,
-.datepicker tfoot tr th:hover,
-.datepicker table tr td.day:hover,
-.datepicker table tr td.day.focused {
+.datepicker table tr td span:hover, .datepicker thead tr:first-child th:hover, .datepicker tfoot tr th:hover, .datepicker table tr td.day:hover, .datepicker table tr td.day.focused {
 	background: rgba(0, 0, 0, 0.25);
 }
 
@@ -737,17 +630,17 @@ h1.page-header {
 
 /*Todo List Widget*/
 
-.todo-list-item .glyphicon { 
-	margin-right:5px; 
-	color: #9fadbb; 
+.todo-list-item .glyphicon {
+	margin-right: 5px;
+	color: #9fadbb;
 }
 
-.todo-list-item .glyphicon:hover { 
-	margin-right:5px; 
-	color: #1b3548; 
+.todo-list-item .glyphicon:hover {
+	margin-right: 5px;
+	color: #1b3548;
 }
 
-.todo-list { 
+.todo-list {
 	padding: 0;
 	margin: -15px;
 	background: #fff;
@@ -758,14 +651,14 @@ h1.page-header {
 	margin: 0;
 }
 
-.todo-list .checkbox { 
-	display:inline-block; 
+.todo-list .checkbox {
+	display: inline-block;
 	margin: 0px;
 }
 
-.panel-body input[type=checkbox]:checked + label { 
+.panel-body input[type=checkbox]:checked + label {
 	text-decoration: line-through;
-	color: #777; 
+	color: #777;
 }
 
 .todo-list-item {
@@ -783,7 +676,6 @@ h1.page-header {
 	color: #ef4040;
 }
 
-
 /*Chat Widget*/
 
 .chat ul {
@@ -798,8 +690,12 @@ h1.page-header {
 	border-bottom: 1px solid #eee;
 }
 
-.chat ul li.left .chat-body { margin-left: 100px;}
-.chat ul li.right .chat-body { margin-right: 100px;}
+.chat ul li.left .chat-body {
+	margin-left: 100px;
+}
+.chat ul li.right .chat-body {
+	margin-right: 100px;
+}
 
 .chat ul li .chat-body p {
 	margin: 0;
@@ -843,22 +739,21 @@ h1.page-header {
 	border-right: none;
 }
 
-.table>thead>tr>th {
+.table > thead > tr > th {
 	border-bottom: 1px solid #e6e7e8;
 	vertical-align: middle;
 	height: 50px;
 }
 
 .fixed-table-pagination .pagination {
-    margin-top: 10px;
-    margin-bottom: 0px;
+	margin-top: 10px;
+	margin-bottom: 0px;
 }
 .fixed-table-pagination .pagination-detail {
 	margin-top: 20px;
 }
 
 /*Icons*/
-
 
 .sidebar .glyph, .user-menu .glyph {
 	height: 16px;
@@ -928,12 +823,4 @@ h1.page-header {
 	height: 65px;
 	overflow: scroll;
 }
-
-
-
-
-
-
-
-
 

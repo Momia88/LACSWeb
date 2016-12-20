@@ -30,9 +30,7 @@ Date.prototype.dateDiff = function(interval, objDate) {
 	case "w":
 		return parseInt((dtEnd - this) / (86400000 * 7));
 	case "m":
-		return (dtEnd.getMonth() + 1)
-				+ ((dtEnd.getFullYear() - this.getFullYear()) * 12)
-				- (this.getMonth() + 1);
+		return (dtEnd.getMonth() + 1) + ((dtEnd.getFullYear() - this.getFullYear()) * 12) - (this.getMonth() + 1);
 	case "y":
 		return dtEnd.getFullYear() - this.getFullYear();
 	}
@@ -90,13 +88,12 @@ function drawBarChart(canvasId) {
 			var stdValue = chartJsonData.stdValue;
 
 			// Chart Setting
-			var avgIndex = (avgValue - minValue) / (maxValue - minValue) * 10
-					+ 2;
+			var avgIndex = (avgValue - minValue) / (maxValue - minValue) * 10 + 2;
 
 			var bubbleData = {
-				datasets : [ {
+				datasets : [{
 					label : 'First Dataset',
-					data : [ {
+					data : [{
 						x : 0.2938,
 						y : 0.3130,
 						r : 2
@@ -160,10 +157,10 @@ function drawBarChart(canvasId) {
 						x : 0.2976,
 						y : 0.3245,
 						r : 2
-					} ],
+					}],
 					backgroundColor : "#FF6384",
 					hoverBackgroundColor : "#FF6384",
-				} ],
+				}],
 			};
 
 			var options = {
@@ -179,19 +176,19 @@ function drawBarChart(canvasId) {
 					}
 				},
 				scales : {
-					xAxes : [ {
+					xAxes : [{
 						ticks : {
 							suggestedMin : 0.27,
 							suggestedMax : 0.32,
 						}
-					} ],
-					yAxes : [ {
+					}],
+					yAxes : [{
 
 						ticks : {
 							suggestedMin : 0.29,
 							suggestedMax : 0.34,
 						}
-					} ]
+					}]
 				},
 			};
 
@@ -219,15 +216,12 @@ function drawBarChart(canvasId) {
 						ctx.textBaseline = "bottom";
 						ctx.save();
 						ctx.beginPath();
-						ctx.moveTo(xaxis.getPixelForValue(undefined, index),
-								yaxis.top);
+						ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top);
 						ctx.strokeStyle = '#FF0000';
-						ctx.lineTo(xaxis.getPixelForValue(undefined, index),
-								yaxis.bottom);
+						ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
 						ctx.stroke();
 						ctx.restore();
-						ctx.fillText(avgValue, xaxis.getPixelForValue(
-								undefined, index), yaxis.top);
+						ctx.fillText(avgValue, xaxis.getPixelForValue(undefined, index), yaxis.top);
 
 					}
 				}

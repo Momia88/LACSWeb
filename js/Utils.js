@@ -1,14 +1,13 @@
 /**
- * 
+ *
  */
 
 var randomColorFactor = function() {
 	return Math.round(Math.random() * 255);
 };
 var randomColor = function() {
-    return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',.7)';
+	return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',.7)';
 };
-
 
 Date.prototype.dateDiff = function(interval, objDate) {
 	var dtEnd = new Date(objDate);
