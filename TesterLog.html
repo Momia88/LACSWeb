@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Charts</title>
+
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link href="css/styles.css" rel="stylesheet">
+		<link href="css/jquery-ui.css" rel="stylesheet">
+		<link href="css/loading.css" rel="stylesheet">
+
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script src="js/jquery-ui.js"></script>
+		<script src="js/math.min.js"></script>
+		<script src="js/Chart.js"></script>
+		<!--Icons-->
+		<script src="js/lumino.glyphs.js"></script>
+
+		<style type="text/css">
+			#chartInfo {
+				margin: 15px;
+			}
+
+			input {
+				margin: 5px;
+				padding-left: 10px;
+				padding-right: 10px;
+				padding-top: 5px;
+				padding-bottom: 5px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="loading" style="display: none"></div>
+
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<a class="navbar-brand" href="#">LACS DashBoard</a>
+			<ul class="user-menu">
+				<li class="dropdown pull-right">
+					<a href="index.html">Logout</a>
+				</li>
+			</ul>
+		</nav>
+
+		<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar"></div>
+		<script>
+			$(function() {
+				$("#sidebar-collapse").load("Menu.html");
+			});
+		</script>
+		<!--/.sidebar-->
+
+		<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+			<div class="row">
+				<div id="chartInfo">
+					<form action=testerView.html method="post">
+						<label>日期查詢：</label>
+						<input type="text" id="startdatepicker"
+						required="required">
+						~
+						<input type="text"
+						id="enddatepicker" required="required">
+						<br />
+						<label>Model Type:</label>
+						<input type="text" id="modelType">
+						<label>Site:</label>
+						<input
+						type="text" id="siteNum" required="required">
+						<input
+						onclick="saveData()" type="submit" id="sumitBtn" value="提交" />
+					</form>
+				</div>
+			</div>
+			<!--/.row-->
+		</div>
+
+		<script>
+			$(function() {
+				$("#startdatepicker").datepicker({
+					dateFormat : 'yy-mm-dd'
+				});
+				$("#enddatepicker").datepicker({
+					dateFormat : 'yy-mm-dd'
+				});
+			});
+		</script>
+		<script src="js/ChartConfig.js"></script>
+		<script src="js/Utils.js"></script>
+		<script>
+			function saveData() {
+				var _mType = document.getElementById("modelType").value;
+				var _siteNum = document.getElementById("siteNum").value;
+				var _sTime = document.getElementById("startdatepicker").value;
+				var _eTime = document.getElementById("enddatepicker").value;
+				sessionStorage.setItem('mType', _mType);
+				sessionStorage.setItem('siteNum', _siteNum);
+				sessionStorage.setItem('sTime', _sTime);
+				sessionStorage.setItem('eTime', _eTime);
+			}
+		</script>
+	</body>
+
+</html>

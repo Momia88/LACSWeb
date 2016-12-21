@@ -36,30 +36,19 @@
 	<body>
 		<div id="loading" style="display: none"></div>
 
-		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#sidebar-collapse">
-						<span class="sr-only">Toggle navigation</span><span
-						class="icon-bar"></span><span class="icon-bar"></span><span
-						class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">LACS DashBoard</a>
-					<ul class="user-menu">
-						<li class="dropdown pull-right">
-							<a href="index.html"
-							class="dropdown-toggle" data-toggle="dropdown">Logout</a>
-						</li>
-					</ul>
-				</div>
-			</div>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<label class="navbar-brand">LACS DashBoard</label>
+			<ul class="user-menu">
+				<li class="dropdown pull-right">
+					<a href="index.html">Logout</a>
+				</li>
+			</ul>
 		</nav>
 
 		<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar"></div>
 		<script>
 			$(function() {
-				$("#sidebar-collapse").load("menu.html");
+				$("#sidebar-collapse").load("Menu.html");
 			});
 		</script>
 		<!--/.sidebar-->
@@ -67,24 +56,24 @@
 		<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 			<div class="row">
 				<div id="chartInfo">
-					<form action=scatterView.html method="post">
+					<form action=chartView.html method="post">
 						<label>日期查詢：</label>
 						<input type="text" id="startdatepicker"
 						required="required">
 						~
 						<input type="text"
 						id="enddatepicker" required="required">
-						<br />
 						<label>Model
 							Type:</label>
 						<input type="text" id="modelType" required="required">
 						<label>Chart Type :</label>
 						<select id="chartType"
 						required="required">
-							<option value="white_color_distribution">White Color Point Distribution</option>
-							<option value="red_color_distribution">Red Color Point Distribution</option>
-							<option value="green_color_distribution">Green Color Point Distribution</option>
-							<option value="blue_color_distribution">Blue Color Point Distribution</option>
+							<option value="brightness">Brightness</option>
+							<option value="delta_uv">Delta UV</option>
+							<option value="cct">CCT</option>
+							<option value="contrast_ratio">Contrast Ratio</option>
+							<option value="white_color_p9">White 9 Point</option>
 						</select>
 						<br />
 						<label>上限: </label>

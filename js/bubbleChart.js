@@ -51,7 +51,6 @@ function drawBarChart(canvasId) {
 	}
 	jsonData = $.ajax({
 		// url :
-		// 'http://192.168.3.88:8080/LACSProj/api/v1/service/chroma',
 		url : 'http://localhost:8080/LACSProj/api/v1/service/chroma',
 		type : "POST",
 		data : {
