@@ -66,7 +66,7 @@
 		<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 			<div class="row">
 				<div id="chartInfo">
-					<form action=scatterView.html method="post">
+					<form action=ScatterChartView.html method="post">
 						<label>日期查詢：</label>
 						<input type="text" id="startdatepicker"
 						required="required">
@@ -106,9 +106,48 @@
 						<div class="panel-heading">
 							Bar Chart
 						</div>
-						<div id="chart-content" class="panel-body">
-							<div id="panel" class="canvas-wrapper">
-								<canvas id="bar-chart" class="main-chart"></canvas>
+						<div class="panel-body">
+							<div class="canvas-wrapper">
+								<canvas id="xbar-chart" class="main-chart"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<button type="button" id="download-pdf">
+				Download PDF
+			</button>
+
+			<!--/.row-->
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Bar Chart
+						</div>
+						<div class="panel-body">
+							<div class="canvas-wrapper">
+								<canvas id="ybar-chart" class="main-chart"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<button type="button" id="download-pdf">
+				Download PDF
+			</button>
+
+			<!--/.row-->
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Bar Chart
+						</div>
+						<div class="panel-body">
+							<div class="canvas-wrapper">
+								<canvas id="scatter-chart" class="main-chart"></canvas>
 							</div>
 						</div>
 					</div>
@@ -251,171 +290,19 @@
 					success : function(chartJsonData) {
 						// Split timestamp and data into
 						// separate arrays
-						var barLebels = chartJsonData.xLabels;
-						var barValues = chartJsonData.yValues;
+						var xObj = chartJsonData.xObj;
+						var yObj = chartJsonData.yObj;
+						var scatterData = chartJsonData.scatterData;
 
-						// bar color
-						var r = 0;
-						var g = 0;
-						var b = 0;
-						var backColor = [];
-						var borderColor = [];
-						for (var i = 0; i < barLebels.length; i++) {
-							r = randomColorFactor();
-							g = randomColorFactor();
-							b = randomColorFactor();
-							backColor.push('rgba(' + r + "," + g + "," + b + ",0.5)");
-							borderColor.push('rgba(' + r + "," + g + "," + b + ",1)");
+						if (xObj != null) {
+							drawBarChart(xObj, "xbar-chart");
 						}
-
-						// insert html value
-						var maxValue = chartJsonData.maxValue;
-						var minValue = chartJsonData.minValue;
-						var avgValue = chartJsonData.avgValue;
-						var stdValue = chartJsonData.stdValue;
-
-						// Chart Setting
-						var avgIndex = (avgValue - minValue) / (maxValue - minValue) * 10 + 2;
-
-						var bubbleData = {
-							datasets : [{
-								label : 'First Dataset',
-								data : [{
-									x : 0.2938,
-									y : 0.3130,
-									r : 2
-								}, {
-									x : 0.2931,
-									y : 0.3123,
-									r : 2
-								}, {
-									x : 0.2999,
-									y : 0.3220,
-									r : 2
-								}, {
-									x : 0.2946,
-									y : 0.3129,
-									r : 2
-								}, {
-									x : 0.2904,
-									y : 0.3066,
-									r : 2
-								}, {
-									x : 0.2904,
-									y : 0.3092,
-									r : 2
-								}, {
-									x : 0.2944,
-									y : 0.3190,
-									r : 2
-								}, {
-									x : 0.2941,
-									y : 0.3173,
-									r : 2
-								}, {
-									x : 0.2905,
-									y : 0.3097,
-									r : 2
-								}, {
-									x : 0.2939,
-									y : 0.3206,
-									r : 2
-								}, {
-									x : 0.2904,
-									y : 0.3113,
-									r : 2
-								}, {
-									x : 0.2965,
-									y : 0.3214,
-									r : 2
-								}, {
-									x : 0.2908,
-									y : 0.3111,
-									r : 2
-								}, {
-									x : 0.2926,
-									y : 0.3152,
-									r : 2
-								}, {
-									x : 0.2926,
-									y : 0.3129,
-									r : 2
-								}, {
-									x : 0.2976,
-									y : 0.3245,
-									r : 2
-								}],
-								backgroundColor : "#FF6384",
-								hoverBackgroundColor : "#FF6384",
-							}],
-						};
-
-						var options = {
-							responsive : true,
-							title : {
-								display : true,
-								text : titleStr
-							},
-							elements : {
-								points : {
-									borderWidth : 1,
-									borderColor : 'rgb(0, 0, 0)'
-								}
-							},
-							scales : {
-								xAxes : [{
-									ticks : {
-										suggestedMin : 0.27,
-										suggestedMax : 0.32,
-									}
-								}],
-								yAxes : [{
-
-									ticks : {
-										suggestedMin : 0.29,
-										suggestedMax : 0.34,
-									}
-								}]
-							},
-						};
-
-						var config = {
-							type : 'bubble',
-							data : bubbleData,
-							options : options
-						};
-
-						// show average line
-						var originalLineDraw = Chart.controllers.bar.prototype.draw;
-						Chart.helpers.extend(Chart.controllers.bar.prototype, {
-							draw : function() {
-								originalLineDraw.apply(this, arguments);
-
-								var chart = this.chart;
-								var ctx = chart.chart.ctx;
-
-								var index = chart.config.data.lineAtIndex;
-								if (index) {
-									var xaxis = chart.scales['x-axis-0'];
-									var yaxis = chart.scales['y-axis-0'];
-									ctx.fillStyle = "#0000FF";
-									ctx.textAlign = "center";
-									ctx.textBaseline = "bottom";
-									ctx.save();
-									ctx.beginPath();
-									ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top);
-									ctx.strokeStyle = '#FF0000';
-									ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
-									ctx.stroke();
-									ctx.restore();
-									ctx.fillText(avgValue, xaxis.getPixelForValue(undefined, index), yaxis.top);
-
-								}
-							}
-						});
-
-						var ctx = document.getElementById('bar-chart');
-						var myChart = new Chart(ctx, config);
+						if (yObj != null) {
+							drawBarChart(yObj, "ybar-chart");
+						}
+						if (scatterData != null) {
+							drawScatterChart(scatterData, "scatter-chart");
+						}
 
 					},
 					beforeSend : function() {
@@ -430,7 +317,171 @@
 				});
 			};
 
+			function drawBarChart(chartData, canvasName) {
+				var barLebels = chartData.xLabels;
+				var barValues = chartData.yValues;
+
+				// bar color
+				var r = 0;
+				var g = 0;
+				var b = 0;
+				var backColor = [];
+				var borderColor = [];
+				for (var i = 0; i < barLebels.length; i++) {
+					r = randomColorFactor();
+					g = randomColorFactor();
+					b = randomColorFactor();
+					backColor.push('rgba(' + r + "," + g + "," + b + ",0.5)");
+					borderColor.push('rgba(' + r + "," + g + "," + b + ",1)");
+				}
+
+				// insert html value
+				var maxValue = chartData.maxValue;
+				var minValue = chartData.minValue;
+				var avgValue = chartData.avgValue;
+				var stdValue = chartData.stdValue;
+
+				var distance = (maxValue - minValue) / 10;
+				if (distance <= 0) {
+					distance = 50;
+				}
+				var avgIndex = (avgValue - minValue) / distance + 1.5;
+				var uslIndex = (uslValue - minValue) / distance + 1.5;
+				var lslIndex = (lslValue - minValue) / distance + 1.5;
+				var specIndex = (specValue - minValue) / distance + 1.5;
+
+				if (uslIndex > 12) {
+					uslIndex = 12.5;
+				} else if (uslIndex <= 0) {
+					uslIndex = 0.5;
+				}
+				if (lslIndex > 12) {
+					lslIndex = 12.5;
+				} else if (lslIndex <= 0) {
+					lslIndex = 0.5;
+				}
+
+				var type = "bar";
+				var title = "DHD850 ";
+				var label = "台數：";
+				var categories = barLebels;
+				var data = barValues;
+				var color = backColor;
+				var config = getNewConfig(color, type, title, label, categories, data);
+				config.data.lineAtIndex = avgIndex;
+				config.data.uslAtIndex = uslIndex;
+				config.data.lslAtIndex = lslIndex;
+
+				var ctx = document.getElementById(canvasName).getContext("2d");
+				var barChart = new Chart(ctx, config);
+
+				// show average line
+				var originalLineDraw = Chart.controllers.bar.prototype.draw;
+				Chart.helpers.extend(Chart.controllers.bar.prototype, {
+					draw : function() {
+						originalLineDraw.apply(this, arguments);
+						drawLine(barChart, avgIndex, avgValue, false, "#FF0000", 12);
+						drawLine(barChart, uslIndex, uslValue, true, "#000000", 0);
+						drawLine(barChart, lslIndex, lslValue, true, "#000000", 0);
+						drawLine(barChart, specIndex, specValue, true, "#000000", 0);
+					}
+				});
+
+				// show bar value
+				config.options.animation.onComplete = function() {
+					ctx.font = "14px Arial";
+					ctx.fillStyle = "#0000FF";
+					ctx.textAlign = "center";
+					ctx.textBaseline = "bottom";
+					var datasets = config.data.datasets;
+					datasets.forEach(function(dataset, i) {
+						barChart.getDatasetMeta(i).data.forEach(function(p, j) {
+							ctx.fillText(datasets[i].data[j], p._model.x, p._model.y);
+						});
+					});
+				};
+
+			};
+
+			function drawScatterChart(chartData, canvasName) {
+				var bubbleData = {
+					datasets : [{
+						label : 'First Dataset',
+						data : chartData,
+						backgroundColor : "#FF6384",
+						hoverBackgroundColor : "#FF6384",
+					}],
+				};
+
+				var options = {
+					responsive : true,
+					title : {
+						display : true,
+						text : "DHD850"
+					},
+					elements : {
+						points : {
+							borderWidth : 1,
+							borderColor : 'rgb(0, 0, 0)'
+						}
+					},
+					scales : {
+						xAxes : [{
+							ticks : {
+								//suggestedMin : 0.27,
+								//suggestedMax : 0.32,
+							}
+						}],
+						yAxes : [{
+
+							ticks : {
+								//suggestedMin : 0.29,
+								//suggestedMax : 0.34,
+							}
+						}]
+					},
+				};
+
+				var config = {
+					type : 'bubble',
+					data : bubbleData,
+					options : options
+				};
+
+				var ctx = document.getElementById(canvasName);
+				var myChart = new Chart(ctx, config);
+
+			};
+
+			var drawLine = function(chart, index, value, lineDash, lineColor, offset) {
+				if (index) {
+					ctx = chart.chart.ctx;
+					var xaxis = chart.scales['x-axis-0'];
+					var yaxis = chart.scales['y-axis-0'];
+					if (lineDash) {
+						ctx.setLineDash([5, 5]);
+					} else {
+						ctx.setLineDash([0, 0]);
+					}
+					ctx.save();
+					ctx.beginPath();
+					ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top - offset);
+					ctx.strokeStyle = lineColor;
+					ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
+					var x = xaxis.getPixelForValue(undefined, index);
+					var y = yaxis.top;
+					ctx.textAlign = "center";
+					ctx.textBaseline = "bottom";
+					ctx.font = "14px Arial";
+					ctx.fillStyle = lineColor;
+					ctx.fillText(value, x, y - offset);
+					ctx.stroke();
+					ctx.restore();
+				}
+			};
+
 		</script>
+
 	</body>
 
 </html>
