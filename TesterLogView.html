@@ -71,22 +71,17 @@
 		<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 			<div class="row">
 				<div id="chartInfo">
-					<form action=testerView.html method="post">
+					<form action=TesterLogView.html method="post">
 						<label>日期查詢：</label>
-						<input type="text" id="startdatepicker"
-						required="required">
+						<input type="text" id="startdatepicker" required="required">
 						~
-						<input type="text"
-						id="enddatepicker" required="required">
+						<input type="text" id="enddatepicker" required="required">
 						<br />
-						<label>Model
-							Type:</label>
+						<label>Model Type:</label>
 						<input type="text" id="modelType">
 						<label>Site:</label>
-						<input type="text" id="siteNum"
-						required="required">
-						<input onclick="saveData()"
-						type="submit" id="sumitBtn" value="提交" />
+						<input type="text" id="siteNum"required="required">
+						<input onclick="saveData()" type="submit" id="sumitBtn" value="提交" />
 					</form>
 				</div>
 			</div>
@@ -99,7 +94,7 @@
 							HPBU Log
 						</div>
 						<div class="panel-body">
-							<table id="table"></table>
+							<table id="table" width="100%"></table>
 						</div>
 					</div>
 				</div>
@@ -112,7 +107,7 @@
 							Detail Table
 						</div>
 						<div class="panel-body">
-							<table id="detailtable"></table>
+							<table id="detailtable" width="100%"></table>
 						</div>
 					</div>
 				</div>
@@ -266,24 +261,18 @@
 				for ( i = 0; i < columnList.length; i++) {
 					var key = columnList[i].title;
 					if (row[key] != null) {
-						var detail = new DetailObj;
-						detail.Command = key;
-						detail.Description = commDescriptionPair[key];
-						detail.TestingValue = row[key];
-						detail.Result = commResultPair[key];
+						var detail = new DetailObj(key, commDescriptionPair[key], row[key], commResultPair[key]);
 						list.push(detail);
 					}
 				}
 				return list;
 			};
 
-			class DetailObj {
-				constructor(Command, Description, TestingValue, Result) {
-					this.Command = Command;
-					this.Description = Description;
-					this.TestingValue = TestingValue;
-					this.Result = Result;
-				}
+			function DetailObj(Command, Description, TestingValue, Result) {
+				this.Command = Command;
+				this.Description = Description;
+				this.TestingValue = TestingValue;
+				this.Result = Result;
 			};
 
 			function detailTable(datalist) {

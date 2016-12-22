@@ -66,33 +66,29 @@
 		<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 			<div class="row">
 				<div id="chartInfo">
-					<form action=chartView.html method="post">
+					<form action="LineChartView.html" method="post">
 						<label>日期查詢：</label>
-						<input type="text" id="startdatepicker"
-						required="required">
+						<input type="text" id="startdatepicker" required="required">
 						~
-						<input type="text"
-						id="enddatepicker" required="required">
-						<label>Model
-							Type:</label>
+						<input type="text" id="enddatepicker" required="required">
+						<br />
+						<label>Model Type:</label>
 						<input type="text" id="modelType" required="required">
+						<label>Site:</label>
+						<input type="text" id="siteNum"required="required">
+						<label>Serial Num:</label>
+						<input type="text" id="serialNum"required="required">
+						<br />
 						<label>Chart Type :</label>
 						<select id="chartType"
 						required="required">
 							<option value="brightness">Brightness</option>
-							<option value="delta_uv">Delta UV</option>
-							<option value="cct">CCT</option>
-							<option value="contrast_ratio">Contrast Ratio</option>
-							<option value="white_color_p9">White 9 Point</option>
+							<option value="fan-info">Fan Info</option>
+							<option value="fan-pwm">Fan PWM</option>
+							<option value="blue-ld-driverboard-1">Blue LD Driver Board #1</option>
+							<option value="blue-ld-driverboard-2">Blue LD Driver Board #2</option>
+							<option value="blue-ld-driverboard-3">Blue LD Driver Board #3</option>
 						</select>
-						<br />
-						<label>上限: </label>
-						<input type="text" id="uslValue">
-						<label>下限:</label>
-						<input type="text" id="lslValue">
-						<label>標準:</label>
-						<input
-						type="text" id="specValue">
 						<input onclick="saveData()"
 						type="submit" id="sumitBtn" value="提交" />
 					</form>
@@ -100,25 +96,6 @@
 			</div>
 			<!--/.row-->
 
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							Bar Chart
-						</div>
-						<div id="chart-content" class="panel-body">
-							<div id="panel" class="canvas-wrapper">
-								<canvas id="bar-chart" class="main-chart"></canvas>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<button type="button" id="download-pdf">
-				Download PDF
-			</button>
-
-			<!--/.row-->
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
@@ -133,13 +110,16 @@
 					</div>
 				</div>
 			</div>
+			<button type="button" id="download-pdf">
+				Download PDF
+			</button>
 			<!--/.row-->
 		</div>
 		<!--/.main-->
 		<script type="text/javascript">
 			//donwload pdf from original canvas
 			function downloadPDF() {
-				var canvas = document.querySelector('#bar-chart');
+				var canvas = document.querySelector('#line-chart');
 				//creates image
 				var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
 
@@ -172,19 +152,15 @@
 				var _cType = document.getElementById("chartType").value;
 				var _sTime = document.getElementById("startdatepicker").value;
 				var _eTime = document.getElementById("enddatepicker").value;
-				// 平均線位置
-				var _uslValue = document.getElementById("uslValue").value;
-				var _lslValue = document.getElementById("lslValue").value;
-				var _specValue = document.getElementById("specValue").value;
+				var _siteNum = document.getElementById("siteNum").value;
+				var _serialNum = document.getElementById("serialNum").value;
 
 				sessionStorage.setItem('mType', _mType);
 				sessionStorage.setItem('cType', _cType);
 				sessionStorage.setItem('sTime', _sTime);
 				sessionStorage.setItem('eTime', _eTime);
-				sessionStorage.setItem('uslValue', _uslValue);
-				sessionStorage.setItem('lslValue', _lslValue);
-				sessionStorage.setItem('specValue', _specValue);
-
+				sessionStorage.setItem('siteNum', _siteNum);
+				sessionStorage.setItem('serialNum', _serialNum);
 			}
 
 
@@ -194,17 +170,15 @@
 				var cType = sessionStorage.getItem("cType");
 				var sTime = sessionStorage.getItem("sTime");
 				var eTime = sessionStorage.getItem("eTime");
-				var uslValue = sessionStorage.getItem("uslValue");
-				var lslValue = sessionStorage.getItem("lslValue");
-				var specValue = sessionStorage.getItem("specValue");
+				var siteNum = sessionStorage.getItem("siteNum");
+				var serialNum = sessionStorage.getItem("serialNum");
 
 				document.getElementById("modelType").value = mType;
 				document.getElementById("chartType").value = cType;
 				document.getElementById("startdatepicker").value = sTime;
 				document.getElementById("enddatepicker").value = eTime;
-				document.getElementById("uslValue").value = uslValue;
-				document.getElementById("lslValue").value = lslValue;
-				document.getElementById("specValue").value = specValue;
+				document.getElementById("siteNum").value = siteNum;
+				document.getElementById("serialNum").value = serialNum;
 
 				var titleStr = mType + sTime + " - " + eTime;
 				var s = new Date(sTime);
@@ -214,13 +188,15 @@
 					return;
 				}
 				jsonData = $.ajax({
-					url : serverIP + '/service/chroma',
+					url : serverIP + '/service/linechart',
 					type : "POST",
 					data : {
 						modelType : mType,
 						chartType : cType,
 						startTime : sTime,
-						endTime : eTime
+						endTime : eTime,
+						siteNum : siteNum,
+						serialNum : serialNum
 					},
 					dataType : 'json',
 					success : function(chartJsonData) {
@@ -231,9 +207,12 @@
 							return;
 						}
 
-						var barLebels = chartJsonData.xLabels;
-						var barValues = chartJsonData.yValues;
-
+						var barLebels = chartJsonData.dateList;
+						var barValues = chartJsonData.valueList;
+						if (barValues.length == 0) {
+							alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
+							return;
+						}
 						// bar color
 						var r = 0;
 						var g = 0;
@@ -248,87 +227,18 @@
 							borderColor.push('rgba(' + r + "," + g + "," + b + ",1)");
 						}
 
-						// insert html value
-						var maxValue = chartJsonData.maxValue;
-						var minValue = chartJsonData.minValue;
-						var avgValue = chartJsonData.avgValue;
-						var stdValue = chartJsonData.stdValue;
-
-						var distance = (maxValue - minValue) / 10;
-						if (distance <= 0) {
-							distance = 50;
-						}
-						var avgIndex = (avgValue - minValue) / distance + 1.5;
-						var uslIndex = (uslValue - minValue) / distance + 1.5;
-						var lslIndex = (lslValue - minValue) / distance + 1.5;
-						var specIndex = (specValue - minValue) / distance + 1.5;
-
-						if (uslIndex > 12) {
-							uslIndex = 12.5;
-						} else if (uslIndex <= 0) {
-							uslIndex = 0.5;
-						}
-						if (lslIndex > 12) {
-							lslIndex = 12.5;
-						} else if (lslIndex <= 0) {
-							lslIndex = 0.5;
-						}
-
-						var type = "bar";
+						var type = "line";
 						var title = "DHD850 " + cType;
-						var label = "台數：";
+						var label = "亮度：";
 						var categories = barLebels;
 						var data = barValues;
 						var color = backColor;
 						var config = getNewConfig(color, type, title, label, categories, data);
-						config.data.lineAtIndex = avgIndex;
-						config.data.uslAtIndex = uslIndex;
-						config.data.lslAtIndex = lslIndex;
 
-						// show bar value
-						config.options.animation.onComplete = function() {
-							var ctx = this.chart.ctx;
-							ctx.font = "14px Arial";
-							ctx.fillStyle = "#0000FF";
-							ctx.textAlign = "center";
-							ctx.textBaseline = "bottom";
-							var chart = this;
-							var datasets = this.config.data.datasets;
-
-							datasets.forEach(function(dataset, i) {
-								chart.getDatasetMeta(i).data.forEach(function(p, j) {
-									ctx.fillText(datasets[i].data[j], p._model.x, p._model.y);
-								});
-							});
-						};
-						if (window.bar != undefined) {
-							window.bar.destroy();
-						}
-
-						canvas = document.getElementById('bar-chart');
+						canvas = document.getElementById('line-chart');
 						var ctx = canvas.getContext("2d");
-						ctx.clearRect(0, 0, canvas.width, canvas.height);
-						ctx.fillStyle = "#FFFFFF";
-						ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 						window.bar = new Chart(ctx, config);
-						config.type = "line";
-						var linectx = document.getElementById('line-chart');
-						window.bar = new Chart(linectx, config);
-
-						// show average line
-						var originalLineDraw = Chart.controllers.bar.prototype.draw;
-						Chart.helpers.extend(Chart.controllers.bar.prototype, {
-							draw : function() {
-								originalLineDraw.apply(this, arguments);
-								var chart = this.chart;
-								drawLine(chart, avgIndex, avgValue, false, "#FF0000", 12);
-								drawLine(chart, uslIndex, uslValue, true, "#000000", 0);
-								drawLine(chart, lslIndex, lslValue, true, "#000000", 0);
-								drawLine(chart, specIndex, specValue, true, "#000000", 0);
-							}
-						});
-
 					},
 
 					beforeSend : function() {
@@ -341,33 +251,6 @@
 						alert("ERROR!!!");
 					}
 				});
-			};
-
-			var drawLine = function(chart, index, value, lineDash, lineColor, offset) {
-				if (index) {
-					var ctx = chart.chart.ctx;
-					var xaxis = chart.scales['x-axis-0'];
-					var yaxis = chart.scales['y-axis-0'];
-					if (lineDash) {
-						ctx.setLineDash([5, 5]);
-					} else {
-						ctx.setLineDash([0, 0]);
-					}
-					ctx.save();
-					ctx.beginPath();
-					ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top - offset);
-					ctx.strokeStyle = lineColor;
-					ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
-					var x = xaxis.getPixelForValue(undefined, index);
-					var y = yaxis.top;
-					ctx.textAlign = "center";
-					ctx.textBaseline = "bottom";
-					ctx.font = "14px Arial";
-					ctx.fillStyle = lineColor;
-					ctx.fillText(value, x, y - offset);
-					ctx.stroke();
-					ctx.restore();
-				}
 			};
 		</script>
 	</body>
