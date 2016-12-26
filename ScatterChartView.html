@@ -162,18 +162,19 @@
 				var _sTime = document.getElementById("startdatepicker").value;
 				var _eTime = document.getElementById("enddatepicker").value;
 				// 平均線位置
-				var _uslValue = document.getElementById("uslValue").value;
-				var _lslValue = document.getElementById("lslValue").value;
-				var _specValue = document.getElementById("specValue").value;
+				var _xuslValue = document.getElementById("xuslValue").value;
+				var _yuslValue = document.getElementById("yuslValue").value;
+				var _xlslValue = document.getElementById("xlslValue").value;
+				var _ylslValue = document.getElementById("ylslValue").value;
 
 				sessionStorage.setItem('mType', _mType);
 				sessionStorage.setItem('cType', _cType);
 				sessionStorage.setItem('sTime', _sTime);
 				sessionStorage.setItem('eTime', _eTime);
-				sessionStorage.setItem('uslValue', _uslValue);
-				sessionStorage.setItem('lslValue', _lslValue);
-				sessionStorage.setItem('specValue', _specValue);
-
+				sessionStorage.setItem('xuslValue', _xuslValue);
+				sessionStorage.setItem('yuslValue', _yuslValue);
+				sessionStorage.setItem('xlslValue', _xlslValue);
+				sessionStorage.setItem('ylslValue', _ylslValue);
 			}
 
 
@@ -183,9 +184,11 @@
 				var cType = sessionStorage.getItem("cType");
 				var sTime = sessionStorage.getItem("sTime");
 				var eTime = sessionStorage.getItem("eTime");
-				var uslValue = sessionStorage.getItem("uslValue");
-				var lslValue = sessionStorage.getItem("lslValue");
-				var specValue = sessionStorage.getItem("specValue");
+				var xuslValue = sessionStorage.getItem("xuslValue");
+				var yuslValue = sessionStorage.getItem("yuslValue");
+				var xlslValue = sessionStorage.getItem("xlslValue");
+				var ylslValue = sessionStorage.getItem("ylslValue");
+
 				if (sTime == null) {
 					return null;
 				}
@@ -193,9 +196,10 @@
 				document.getElementById("chartType").value = cType;
 				document.getElementById("startdatepicker").value = sTime;
 				document.getElementById("enddatepicker").value = eTime;
-				document.getElementById("uslValue").value = uslValue;
-				document.getElementById("lslValue").value = lslValue;
-				document.getElementById("specValue").value = specValue;
+				document.getElementById("xuslValue").value = xuslValue;
+				document.getElementById("yuslValue").value = yuslValue;
+				document.getElementById("xlslValue").value = xlslValue;
+				document.getElementById("ylslValue").value = ylslValue;
 
 				var titleStr = mType + sTime + " - " + eTime;
 				var s = new Date(sTime);

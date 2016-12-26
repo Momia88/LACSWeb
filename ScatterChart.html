@@ -79,13 +79,14 @@
 							<option value="blue_color">Blue center</option>
 						</select>
 						<br />
-						<label>上限: </label>
-						<input type="text" id="uslValue">
-						<label>下限:</label>
-						<input type="text" id="lslValue">
-						<label>標準:</label>
-						<input
-						type="text" id="specValue">
+						<label>X 上限: </label>
+						<input type="text" id="xuslValue">
+						<label>X 下限:</label>
+						<input type="text" id="xlslValue">
+						<label>Y 上限: </label>
+						<input type="text" id="yuslValue">
+						<label>Y 下限:</label>
+						<input type="text" id="ylslValue">
 						<input onclick="saveData()"
 						type="submit" id="sumitBtn" value="提交" />
 					</form>
@@ -113,17 +114,19 @@
 				var _sTime = document.getElementById("startdatepicker").value;
 				var _eTime = document.getElementById("enddatepicker").value;
 				// 平均線位置
-				var _uslValue = document.getElementById("uslValue").value;
-				var _lslValue = document.getElementById("lslValue").value;
-				var _specValue = document.getElementById("specValue").value;
+				var _xuslValue = document.getElementById("xuslValue").value;
+				var _yuslValue = document.getElementById("yuslValue").value;
+				var _xlslValue = document.getElementById("xlslValue").value;
+				var _ylslValue = document.getElementById("ylslValue").value;
 
 				sessionStorage.setItem('mType', _mType);
 				sessionStorage.setItem('cType', _cType);
 				sessionStorage.setItem('sTime', _sTime);
 				sessionStorage.setItem('eTime', _eTime);
-				sessionStorage.setItem('uslValue', _uslValue);
-				sessionStorage.setItem('lslValue', _lslValue);
-				sessionStorage.setItem('specValue', _specValue);
+				sessionStorage.setItem('xuslValue', _xuslValue);
+				sessionStorage.setItem('yuslValue', _yuslValue);
+				sessionStorage.setItem('xlslValue', _xlslValue);
+				sessionStorage.setItem('ylslValue', _ylslValue);
 			}
 		</script>
 	</body>
