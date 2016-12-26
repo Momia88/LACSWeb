@@ -64,6 +64,9 @@
 		<!--/.sidebar-->
 
 		<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+			<div class="row" style="font-size: 24px; margin: 5px 10px 5px 0px">
+				亮度區間圖
+			</div>
 			<div class="row">
 				<div id="chartInfo">
 					<form action="BarChartView.html" method="post">
@@ -91,7 +94,8 @@
 							<option value="green_color_y">Green y center</option>
 							<option value="blue_color_x">Blue x center</option>
 							<option value="blue_color_y">Blue y center</option>
-							<option value="white_color_p9">White 9 Point</option>						</select>
+							<option value="white_color_p9">White 9 Point</option>
+						</select>
 						<br />
 						<label>上限: </label>
 						<input type="text" id="uslValue">
@@ -204,6 +208,10 @@
 				var uslValue = sessionStorage.getItem("uslValue");
 				var lslValue = sessionStorage.getItem("lslValue");
 				var specValue = sessionStorage.getItem("specValue");
+
+				if (sTime == null) {
+					return null;
+				}
 
 				document.getElementById("modelType").value = mType;
 				document.getElementById("chartType").value = cType;

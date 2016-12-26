@@ -3,43 +3,48 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Forms</title>
+		<title>LACS System</title>
 
 		<link href="css/bootstrap.css" rel="stylesheet">
-		<link href="css/datepicker3.css" rel="stylesheet">
 		<link href="css/styles.css" rel="stylesheet">
+		<link href="css/loading.css" rel="stylesheet">
 
 		<!--[if lt IE 9]>
 		<script src="js/html5shiv.js"></script>
 		<script src="js/respond.min.js"></script>
 		<![endif]-->
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script src="js/Variables.js"></script>
 
 	</head>
 
 	<body>
+		<div class="row" align="center">
+			<p style="font-size: 36px">
+				Log Analysis Cloud System
+			</p>
+			<br />
+		</div>
 		<div class="row">
 			<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
 				<div class="login-panel panel panel-default">
-					<div class="panel-heading">
-						Log in
+					<div class="panel-heading" align="center" style="font-size: 24px;">
+						<b>Login</b>
 					</div>
 					<div class="panel-body">
-						<form role="form">
-							<fieldset>
-								<div class="form-group">
-									<input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
-								</div>
-								<div class="form-group">
-									<input class="form-control" placeholder="Password" name="password" type="password" value="">
-								</div>
-								<div class="checkbox">
-									<label>
-										<input name="remember" type="checkbox" value="Remember Me">
-										Remember Me </label>
-								</div>
-								<a href="BarChart.html" class="btn btn-primary">Login</a>
-							</fieldset>
-						</form>
+						<fieldset>
+							<div class="form-group">
+								<input  id="userid" class="form-control" placeholder="Account" name="userid" type="email" autofocus="">
+							</div>
+							<div class="form-group">
+								<input id="passwd" class="form-control" placeholder="Password" name="passwd" type="password" value="">
+							</div>
+							<div align="center">
+								<button id="sumitBtn" onclick="validateForm()">
+									Login
+								</button>
+							</div>
+						</fieldset>
 					</div>
 				</div>
 			</div><!-- /.col-->
@@ -48,6 +53,45 @@
 		<script src="js/jquery-3.1.1.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 
+		<script>
+			var count = 0;
+			function validateForm() {
+				var userid = document.getElementById("userid").value;
+				var passwd = document.getElementById("passwd").value;
+
+				jsonData = $.ajax({
+					url : serverIP + '/service/auth',
+					type : "POST",
+					data : {
+						userId : userid,
+						passwd : passwd,
+					},
+					dataType : 'text',
+					success : function(chartData) {
+						if (chartData == "Y") {
+							window.location = "BarChartView.html";
+						} else {
+							count++;
+							alert("帳號密碼錯誤！ " + count + " 次");
+						}
+						return chartData;
+					},
+
+					beforeSend : function() {
+						$('#loading').show();
+					},
+
+					complete : function() {
+						$('#loading').hide();
+					},
+
+					error : function() {
+						alert("NetWork Error!");
+						return false;
+					}
+				});
+			}
+		</script>
 	</body>
 
 </html>

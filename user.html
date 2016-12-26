@@ -34,7 +34,9 @@
 		<!--/.sidebar-->
 
 		<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
-
+			<div class="row" style="font-size: 24px; margin: 5px 10px 5px 0px">
+				使用者管理
+			</div>
 			<div class="row">
 				<div class="col-md-6">
 					<div class="panel panel-default">
@@ -42,31 +44,97 @@
 							Basic Table
 						</div>
 						<div class="panel-body">
-							<table id="tb_report" data-toggle="table" data-url="data/data2.json">
-								<thead>
-									<tr>
-										<th data-field="id" data-align="right">Item ID</th>
-										<th data-field="name">Item Name</th>
-										<th data-field="price">Item Price</th>
-									</tr>
-								</thead>
-							</table>
+							<table id="tb_report"></table>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<script type="text/javascript">
-				$('#tb_report').bootstrapTable({
-					showExport : true, //是否顯示導出
-					exportDataType : "basic", //basic', 'all', 'selected'.
-
-				});
-			</script>
+			<script type="text/javascript"></script>
 			<!--/.row-->
-
 		</div>
 		<!--/.main-->
+
+		<script>
+			window.operateEvents = {
+				'click .like' : function(e, value, row) {
+					alert('You click like action, row: ' + JSON.stringify(row));
+				},
+				'click .remove' : function(e, value, row) {
+					alert('You click remove action, row: ' + JSON.stringify(row));
+				}
+			};
+
+			function operateFormatter(value, row, index) {
+				return ['<div class="pull-left">', '<a href="https://github.com/wenzhixin/' + value + '" target="_blank">' + value + '</a>', '</div>', '<div class="pull-right">', '<a class="like" href="javascript:void(0)" title="Like">', '<i class="glyphicon glyphicon-heart"></i>', '</a>  ', '<a class="remove" href="javascript:void(0)" title="Remove">', '<i class="glyphicon glyphicon-remove"></i>', '</a>', '</div>'].join('');
+			};
+
+			$('#tb_report').bootstrapTable({
+				showExport : true, //是否顯示導出
+				exportDataType : "basic", //basic', 'all', 'selected'.
+				columns : [{
+					field : 'name',
+					title : '帳號',
+					sortable : true,
+					editable : true,
+					align : 'center'
+				}, {
+					field : 'price',
+					title : '角色',
+					sortable : true,
+					editable : true,
+					align : 'center'
+				}, {
+					field : 'operate',
+					title : '編輯',
+					align : 'center',
+					events : operateEvents,
+					formatter : operateFormatter,
+				}],
+				data : [{
+					"id" : 0,
+					"name" : "Item 0",
+					"price" : "$0"
+				}, {
+					"id" : 1,
+					"name" : "Item 1",
+					"price" : "$1"
+				}, {
+					"id" : 2,
+					"name" : "Item 2",
+					"price" : "$2"
+				}, {
+					"id" : 3,
+					"name" : "Item 3",
+					"price" : "$3"
+				}, {
+					"id" : 4,
+					"name" : "Item 4",
+					"price" : "$4"
+				}, {
+					"id" : 5,
+					"name" : "Item 5",
+					"price" : "$5"
+				}, {
+					"id" : 6,
+					"name" : "Item 6",
+					"price" : "$6"
+				}, {
+					"id" : 7,
+					"name" : "Item 7",
+					"price" : "$7"
+				}, {
+					"id" : 8,
+					"name" : "Item 8",
+					"price" : "$8"
+				}, {
+					"id" : 9,
+					"name" : "Item 9",
+					"price" : "$9"
+				}],
+			});
+
+		</script>
 	</body>
 
 </html>

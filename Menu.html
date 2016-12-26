@@ -1,22 +1,27 @@
 <ul class="nav menu">
 	<li>
-		<a href="BarChart.html"><img class="glyph" alt=""
+		<a href="BarChartView.html" onclick="clearSesson()"><img class="glyph" alt=""
 		src="img/chart-line-icon.png">亮度區間圖</a>
 	</li>
 	<li>
-		<a href="ScatterChart.html"><img class="glyph" alt=""
+		<a href="ScatterChartView.html" onclick="clearSesson()"><img class="glyph" alt=""
 		src="img/chart-scatter-icon.png">色點分佈圖</a>
 	</li>
 		<li>
-		<a href="LineChart.html"><img class="glyph" alt=""
+		<a href="LineChartView.html" onclick="clearSesson()"><img class="glyph" alt=""
 		src="img/chart-line-icon.png">趨勢圖</a>
 	</li>
 	<li>
-		<a href="TesterLog.html"><img class="glyph" alt=""
+		<a href="TesterLogView.html" onclick="clearSesson()"><img class="glyph" alt=""
 		src="img/excel-icon.png">測試報表</a>
 	</li>
 	<li>
-		<a href="User.html"><img class="glyph" alt=""
+		<a href="User.html" onclick="clearSesson()"><img class="glyph" alt=""
 		src="img/users-icon.png">使用者管理</a>
 	</li>
 </ul>
+<script>
+	function clearSesson(){
+		sessionStorage.clear();
+	}
+</script>

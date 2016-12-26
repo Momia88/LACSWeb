@@ -69,6 +69,9 @@
 		<!--/.sidebar-->
 
 		<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+			<div class="row" style="font-size: 24px; margin: 5px 10px 5px 0px">
+				測試報表
+			</div>
 			<div class="row">
 				<div id="chartInfo">
 					<form action=TesterLogView.html method="post">
@@ -147,7 +150,9 @@
 				var siteNum = sessionStorage.getItem("siteNum");
 				var sTime = sessionStorage.getItem("sTime");
 				var eTime = sessionStorage.getItem("eTime");
-
+				if (sTime == null) {
+					return null;
+				}
 				document.getElementById("modelType").value = mType;
 				document.getElementById("siteNum").value = siteNum;
 				document.getElementById("startdatepicker").value = sTime;
