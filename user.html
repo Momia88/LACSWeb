@@ -8,8 +8,11 @@
 		<link href="css/bootstrap.css" rel="stylesheet">
 		<link href="css/bootstrap-table.css" rel="stylesheet">
 		<link href="css/styles.css" rel="stylesheet">
+		<link href="css/loading.css" rel="stylesheet">
+
 		<script src="js/jquery-3.1.1.min.js"></script>
 		<script src="js/bootstrap-table.js"></script>
+		<script src="js/Variables.js"></script>
 
 		<!--Icons-->
 		<script src="js/lumino.glyphs.js"></script>
@@ -41,7 +44,12 @@
 				<div class="col-md-6">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							Basic Table
+							使用者列表
+						</div>
+						<div class="panel-body" style="float: right">
+							<button onclick="addUser('123','123','123');" >
+								新增使用者
+							</button>
 						</div>
 						<div class="panel-body">
 							<table id="tb_report"></table>
@@ -57,83 +65,114 @@
 
 		<script>
 			window.operateEvents = {
-				'click .like' : function(e, value, row) {
-					alert('You click like action, row: ' + JSON.stringify(row));
-				},
 				'click .remove' : function(e, value, row) {
-					alert('You click remove action, row: ' + JSON.stringify(row));
-				}
+					var r = confirm("確定要刪除使用者: " + row.userName);
+					if (r == true) {
+						tableRefresh();
+						alert("You pressed OK!");
+					}
+				},
+				// 'click .edit' : function(e, value, row) {
+				// alert('You click edit action, row: ' + JSON.stringify(row));
+				// },
 			};
 
 			function operateFormatter(value, row, index) {
-				return ['<div class="pull-left">', '<a href="https://github.com/wenzhixin/' + value + '" target="_blank">' + value + '</a>', '</div>', '<div class="pull-right">', '<a class="like" href="javascript:void(0)" title="Like">', '<i class="glyphicon glyphicon-heart"></i>', '</a>  ', '<a class="remove" href="javascript:void(0)" title="Remove">', '<i class="glyphicon glyphicon-remove"></i>', '</a>', '</div>'].join('');
+				//return ['<div class="pull-right">', '<a class="edit" href="javascript:void(0)" title="Edit">', '<i class="glyphicon glyphicon-edit"></i>', '</a>  ', '<a class="remove" href="javascript:void(0)" title="Remove">', '<i class="glyphicon glyphicon-remove"></i>', '</a>', '</div>'].join('');
+				return ['<a class="remove" href="javascript:void(0)" title="Remove">', '<i class="glyphicon glyphicon-remove"></i>', '</a>', '</div>'].join('');
+
 			};
 
-			$('#tb_report').bootstrapTable({
-				showExport : true, //是否顯示導出
-				exportDataType : "basic", //basic', 'all', 'selected'.
-				columns : [{
-					field : 'name',
-					title : '帳號',
-					sortable : true,
-					editable : true,
-					align : 'center'
-				}, {
-					field : 'price',
-					title : '角色',
-					sortable : true,
-					editable : true,
-					align : 'center'
-				}, {
-					field : 'operate',
-					title : '編輯',
-					align : 'center',
-					events : operateEvents,
-					formatter : operateFormatter,
-				}],
-				data : [{
-					"id" : 0,
-					"name" : "Item 0",
-					"price" : "$0"
-				}, {
-					"id" : 1,
-					"name" : "Item 1",
-					"price" : "$1"
-				}, {
-					"id" : 2,
-					"name" : "Item 2",
-					"price" : "$2"
-				}, {
-					"id" : 3,
-					"name" : "Item 3",
-					"price" : "$3"
-				}, {
-					"id" : 4,
-					"name" : "Item 4",
-					"price" : "$4"
-				}, {
-					"id" : 5,
-					"name" : "Item 5",
-					"price" : "$5"
-				}, {
-					"id" : 6,
-					"name" : "Item 6",
-					"price" : "$6"
-				}, {
-					"id" : 7,
-					"name" : "Item 7",
-					"price" : "$7"
-				}, {
-					"id" : 8,
-					"name" : "Item 8",
-					"price" : "$8"
-				}, {
-					"id" : 9,
-					"name" : "Item 9",
-					"price" : "$9"
-				}],
+			jsonData = $.ajax({
+				url : serverIP + '/service/userlist',
+				type : "GET",
+				dataType : 'json',
+				success : function(jsonData) {
+					// Split timestamp and data into
+					// separate arrays
+					if (jsonData == null) {
+						alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
+						return;
+					}
+
+					$('#tb_report').bootstrapTable({
+						showExport : true, //是否顯示導出
+						exportDataType : "basic", //basic', 'all', 'selected'.
+						columns : [{
+							field : 'userId',
+							title : '帳號',
+							sortable : true,
+							editable : true,
+							align : 'center'
+						}, {
+							field : 'userName',
+							title : '姓名',
+							sortable : true,
+							editable : true,
+							align : 'center'
+						}, {
+							field : 'authority',
+							title : '權限',
+							sortable : true,
+							editable : true,
+							align : 'center'
+						}, {
+							field : 'operate',
+							title : '刪除',
+							align : 'center',
+							events : operateEvents,
+							formatter : operateFormatter,
+						}],
+						data : jsonData,
+					});
+				},
+				beforeSend : function() {
+					$('#loading').show();
+				},
+				complete : function() {
+					$('#loading').hide();
+				},
+				error : function() {
+					alert("ERROR!!!");
+				}
 			});
 
+			function addUser(userId, userName, authority) {
+				jsonData = $.ajax({
+					url : serverIP + '/service/useradd',
+					type : "POST",
+					dataType : 'json',
+					data : {
+						userId : userId,
+						userName : userName,
+						authority : authority,
+					},
+					success : function(jsonData) {
+						// Split timestamp and data into
+						// separate arrays
+						if (jsonData == null) {
+							alert("新增失敗！請冾管理人員");
+							return;
+						} else {
+							alert(jsonData);
+						}
+					},
+					beforeSend : function() {
+						$('#loading').show();
+					},
+					complete : function() {
+						$('#loading').hide();
+						tableRefresh();
+					},
+					error : function() {
+						alert("連線有問題，請冾管理人員!!");
+					}
+				});
+			}
+
+			function tableRefresh() {
+				$('#tb_report').bootstrapTable('refresh');
+			};
 		</script>
 	</body>
 
