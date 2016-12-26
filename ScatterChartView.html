@@ -261,10 +261,10 @@
 					success : function(chartJsonData) {
 						// Split timestamp and data into
 						// separate arrays
-						var scatterData = chartJsonData.scatterData;
 
-						if (scatterData != null) {
-							drawScatterChart(scatterData, "scatter-chart");
+						if (chartJsonData != null) {
+							var scatterData = chartJsonData.scatterData;
+							drawScatterChart(mType, scatterData, "scatter-chart");
 						}
 
 					},
@@ -280,7 +280,7 @@
 				});
 			};
 
-			function drawScatterChart(chartData, canvasName) {
+			function drawScatterChart(mType, chartData, canvasName) {
 				var bubbleData = {
 					datasets : [{
 						label : 'First Dataset',
@@ -294,7 +294,7 @@
 					responsive : true,
 					title : {
 						display : true,
-						text : "DHD850"
+						text : mType
 					},
 					elements : {
 						points : {

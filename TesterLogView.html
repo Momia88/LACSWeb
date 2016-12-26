@@ -194,7 +194,7 @@
 						$('#table').bootstrapTable({
 							onClickRow : function(row, $element) {
 								//alert(jsonData.recordList[$element.index()].WSN);
-								var datalist = getDetailList(columnList, commDescriptionPair, commResultPair, row);
+								var datalist = getDetailList(columnList, commDescriptionPair, commResultPair, row,commResultPair[$element.index()]);
 								detailTable(datalist);
 							},
 							columns : columnList,
@@ -261,12 +261,12 @@
 				});
 			};
 
-			function getDetailList(columnList, commDescriptionPair, commResultPair, row) {
+			function getDetailList(columnList, commDescriptionPair, commResultPair, row,resultLis) {
 				var list = [];
 				for ( i = 0; i < columnList.length; i++) {
 					var key = columnList[i].title;
 					if (row[key] != null) {
-						var detail = new DetailObj(key, commDescriptionPair[key], row[key], commResultPair[key]);
+						var detail = new DetailObj(key, commDescriptionPair[key], row[key], resultLis[key]);
 						list.push(detail);
 					}
 				}
