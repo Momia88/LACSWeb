@@ -97,7 +97,7 @@
 							HPBU Log
 						</div>
 						<div class="panel-body">
-							<table id="table" width="100%"></table>
+							<table id="datatable" width="100%"></table>
 						</div>
 					</div>
 				</div>
@@ -157,8 +157,12 @@
 				document.getElementById("siteNum").value = siteNum;
 				document.getElementById("startdatepicker").value = sTime;
 				document.getElementById("enddatepicker").value = eTime;
-
-				var titleStr = mType + "_" + sTime + "_" + eTime + "_s" + siteNum;
+				var titleStr;
+				if (mType == null || mType.length == 0) {
+					titleStr = sTime + "_" + eTime + "_s" + siteNum;
+				} else {
+					titleStr = mType + "_" + sTime + "_" + eTime + "_s" + siteNum;
+				}
 				var s = new Date(sTime);
 				var e = new Date(eTime);
 				if (s.dateDiff("m", e) > 12 || s.dateDiff("m", e) == null) {
@@ -191,11 +195,13 @@
 							alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
 							return;
 						}
-						$('#table').bootstrapTable({
+						$('#datatable').bootstrapTable({
 							onClickRow : function(row, $element) {
 								//alert(jsonData.recordList[$element.index()].WSN);
-								var datalist = getDetailList(columnList, commDescriptionPair, commResultPair, row,commResultPair[$element.index()]);
+								var datalist = getDetailList(columnList, commDescriptionPair, commResultPair, row, commResultPair[$element.index()]);
+								var wsn = jsonData.recordList[$element.index()].WSN;
 								detailTable(datalist);
+								detailDataExport(wsn + '_' + titleStr);
 							},
 							columns : columnList,
 							data : recordList,
@@ -256,12 +262,12 @@
 						dataExport(titleStr);
 					},
 					error : function() {
-						alert("ERROR!!!");
+						alert("The Network Adapter could not establish the connection!!");
 					}
 				});
 			};
 
-			function getDetailList(columnList, commDescriptionPair, commResultPair, row,resultLis) {
+			function getDetailList(columnList, commDescriptionPair, commResultPair, row, resultLis) {
 				var list = [];
 				for ( i = 0; i < columnList.length; i++) {
 					var key = columnList[i].title;
@@ -285,7 +291,28 @@
 			};
 
 			function dataExport(titleStr) {
-				$("table").tableExport({
+				$("#datatable").tableExport({
+					addClass : "", // [String], additional button classes to add, [default: ""]
+					buttonContent : "Export", // [String], text/html to display in the export button, [default: "Export file"]
+					bootstrap : true, // (Boolean), style buttons using bootstrap
+					defaultClass : "btn", // [String], the default button class, [default: "btn"]
+					defaultTheme : "btn-default", // [String], the default button theme, [default: "btn-default"]
+					footers : true, // (Boolean), display table footers (th/td elements) in the <tfoot>
+					formats : ["xlsx", "xls", "csv", "txt"], // (String[]), filetypes for the export
+					fileName : titleStr, // [id, name, String], filename for the downloaded file, [default: "export"]
+					headings : true, // [Boolean], display table headings (th elements) in the first row, [default: true]
+					ignoreRows : null, // (Number, Number[]), row indices to exclude from the exported file
+					ignoreCols : null, // (Number, Number[]), column indices to exclude from the exported file
+					ignoreCSS : ".tableexport-ignore", // (selector, selector[]), selector(s) to exclude from the exported file
+					position : "bottom", // [top, bottom], position of the caption element relative to table, [default: "bottom"]
+					position : "bottom", // (top, bottom), position of the caption element relative to table
+					stripQuotes : true, // [Boolean], remove containing double quotes (.txt files ONLY), [default: true]
+					separator : ",", // [String] column separator, [default: ","]
+				});
+			}
+
+			function detailDataExport(titleStr) {
+				$("#detailtable").tableExport({
 					addClass : "", // [String], additional button classes to add, [default: ""]
 					buttonContent : "Export", // [String], text/html to display in the export button, [default: "Export file"]
 					bootstrap : true, // (Boolean), style buttons using bootstrap
