@@ -9,10 +9,12 @@
 		<link href="css/bootstrap-table.css" rel="stylesheet">
 		<link href="css/styles.css" rel="stylesheet">
 		<link href="css/loading.css" rel="stylesheet">
+		<link href="css/jquery-impromptu.css" rel="stylesheet">
 
 		<script src="js/jquery-3.1.1.min.js"></script>
 		<script src="js/bootstrap-table.js"></script>
 		<script src="js/Variables.js"></script>
+		<script src="js/jquery-impromptu.js"></script>
 
 		<!--Icons-->
 		<script src="js/lumino.glyphs.js"></script>
@@ -47,7 +49,7 @@
 							使用者列表
 						</div>
 						<div class="panel-body" style="float: right">
-							<button onclick="addUser('123','123','123');" >
+							<button  onclick="disp_prompt()">
 								新增使用者
 							</button>
 						</div>
@@ -63,6 +65,35 @@
 		</div>
 		<!--/.main-->
 
+		<script>
+			var statesdemo = {
+				state0 : {
+					title : '新增使用者',
+					html : '<label>帳號 <input type="text" id="uid" value=""></label><br />' + '<label>姓名 <input type="text" id="uname" value=""></label><br />' + '<BR />' + '<label><input type="radio" id="utype1" value="admin"> 管理員</label><br />' + '<label><input type="radio" id="utype2" value="user"> 使用者</label>',
+					buttons : {
+						Done : 1
+					},
+					focus : 1,
+					submit : function(e, v, m, f) {
+						e.preventDefault();
+						$.prompt.close();
+						var uid = document.getElementById('uid').value;
+						var name = document.getElementById('uname').value;
+						if (document.getElementById('utype1').checked) {
+							var utype = document.getElementById('utype1').value;
+						} else {
+							var utype = document.getElementById('utype2').value;
+						}
+
+						alert(uid + '-' + name + '-' + utype);
+
+					}
+				},
+			};
+			function disp_prompt() {
+				$.prompt(statesdemo);
+			}
+		</script>
 		<script>
 			window.operateEvents = {
 				'click .remove' : function(e, value, row) {
@@ -133,15 +164,15 @@
 					$('#loading').hide();
 				},
 				error : function() {
-					alert("ERROR!!!");
+					alert("連線失敗，請檢查網路狀態或冾管理人員。");
 				}
 			});
 
 			function addUser(userId, userName, authority) {
 				jsonData = $.ajax({
-					url : serverIP + '/service/useradd',
+					url : serverIP + '/service/adduser',
 					type : "POST",
-					dataType : 'json',
+					dataType : 'text',
 					data : {
 						userId : userId,
 						userName : userName,
@@ -150,12 +181,7 @@
 					success : function(jsonData) {
 						// Split timestamp and data into
 						// separate arrays
-						if (jsonData == null) {
-							alert("新增失敗！請冾管理人員");
-							return;
-						} else {
-							alert(jsonData);
-						}
+						alert(jsonData);
 					},
 					beforeSend : function() {
 						$('#loading').show();
@@ -168,12 +194,22 @@
 						alert("連線有問題，請冾管理人員!!");
 					}
 				});
-			}
+			};
 
-			function tableRefresh() {
+			function addUserInfo() {
 				$('#tb_report').bootstrapTable('refresh');
 			};
+
+			function tableRefresh() {
+				var sStr = prompt("梦之都的网址是什么？", "请在这里输入");
+				if (sStr != null && sStr != "") {
+					alert("你输入的是：" + sStr);
+				} else {
+					alert("你什么也没有输入");
+				}
+			};
 		</script>
+
 	</body>
 
 </html>
