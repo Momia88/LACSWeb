@@ -56,6 +56,10 @@
 		<script>
 			var count = 0;
 			function validateForm() {
+				if (window.sessionStorage == null) {
+					alert("Browser not support HTML 5 !!");
+					return;
+				}
 				var userid = document.getElementById("userid").value;
 				var passwd = document.getElementById("passwd").value;
 
