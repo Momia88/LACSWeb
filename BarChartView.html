@@ -250,6 +250,7 @@
 						var barValues = chartJsonData.barChartInfo.yValues;
 						var lineLebels = chartJsonData.lineChartInfo.dateList;
 						var lineValues = chartJsonData.lineChartInfo.valueList;
+						var wsnValues = chartJsonData.lineChartInfo.wsnList;
 
 						// bar color
 						var r = 0;
@@ -297,7 +298,7 @@
 						var color = backColor;
 						var categories = barLebels;
 						var data = barValues;
-						var config = getNewConfig(color, type, title, label, categories, data);
+						var config = getNewConfig(color, type, title, label, categories, data, wsnValues);
 						config.data.lineAtIndex = avgIndex;
 						config.data.uslAtIndex = uslIndex;
 						config.data.lslAtIndex = lslIndex;
@@ -318,23 +319,21 @@
 								});
 							});
 						};
-						if (window.bar != undefined) {
-							window.bar.destroy();
-						}
 
 						canvas = document.getElementById('bar-chart');
 						var ctx = canvas.getContext("2d");
 						ctx.clearRect(0, 0, canvas.width, canvas.height);
 						ctx.fillStyle = "#FFFFFF";
 						ctx.fillRect(0, 0, canvas.width, canvas.height);
+						var barChart = new Chart(ctx, config);
 
-						window.bar = new Chart(ctx, config);
 						type = "line";
 						categories = lineLebels;
 						data = lineValues;
-						var config = getNewConfig(color, type, title, label, categories, data);
+						color = '#000000';
+						var config = getNewConfig(color, type, title, label, categories, data, wsnValues);
 						var linectx = document.getElementById('line-chart');
-						window.bar = new Chart(linectx, config);
+						var lineChart = new Chart(linectx, config);
 
 						// show average line
 						var originalLineDraw = Chart.controllers.bar.prototype.draw;
@@ -349,6 +348,15 @@
 							}
 						});
 
+						function DataPoint(id, age, milepost) {
+							this.id = id;
+							this.age = age;
+							this.milepost = milepost;
+							this.tooltip = "Bridge ID:" + id + ", Bridge Age: " + age + ", Milepost: " + milepost;
+						};
+						DataPoint.prototype.toString = function() {
+							return this.id;
+						};
 					},
 
 					beforeSend : function() {

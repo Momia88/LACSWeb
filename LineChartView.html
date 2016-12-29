@@ -213,6 +213,8 @@
 
 						var barLebels = chartJsonData.dateList;
 						var barValues = chartJsonData.valueList;
+						var wsnValues = chartJsonData.wsnList;
+
 						if (barValues.length == 0) {
 							alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
 							return;
@@ -232,12 +234,12 @@
 						}
 
 						var type = "line";
-						var title = mType+ " " + cType;
+						var title = mType + " " + cType;
 						var label = "數值";
 						var categories = barLebels;
 						var data = barValues;
-						var color = backColor;
-						var config = getNewConfig(color, type, title, label, categories, data);
+						var color = "#000000";
+						var config = getNewConfig(color, type, title, label, categories, data, wsnValues);
 
 						canvas = document.getElementById('line-chart');
 						var ctx = canvas.getContext("2d");

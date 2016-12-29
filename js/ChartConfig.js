@@ -9,7 +9,7 @@
  * @param data 一般是Y軸的數據
  * @returns 返回圖表的配置參數
  */
-function getNewConfig(color, type, title, label, categories, data) {
+function getNewConfig(color, type, title, label, categories, data, wsnValues) {
 	var background = color;
 	var chartOptions = {
 		responsive : true,
@@ -25,7 +25,21 @@ function getNewConfig(color, type, title, label, categories, data) {
 			fontSize : 20,
 		},
 		tooltips : {
-			mode : 'label'
+			enabled : true,
+			mode : 'single',
+			callbacks : {
+				label : function(tooltipItems, data) {
+					var str = label + ": " + tooltipItems.yLabel;
+					return str;
+				},
+				afterLabel : function(tooltipItems, data) {
+					var str = "";
+					if (type == 'line') {
+						str = "工單號: " + wsnValues[tooltipItems.index] + "\n";
+					}
+					return str;
+				},
+			}
 		},
 		scales : {
 			xAxes : [{
@@ -37,25 +51,28 @@ function getNewConfig(color, type, title, label, categories, data) {
 				stacked : false,
 				ticks : {
 					suggestedMin : 0,
-					suggestedMax : Math.max.apply(null, data) + 5,
+					suggestedMax : Math.max.apply(null, data) * 1.1,
 				}
 			}]
 		},
-		showTooltips : false,
+		showTooltips : true,
 		animation : {
 			duration : 200,
 		},
+
 	};
 
 	var dataset = {
 		label : label,
 		data : data,
 		fill : false,
-		borderColor : background,
 		backgroundColor : background,
+		borderDash : [0, 0],
+		borderColor : '#A0A0A0',
 		pointBorderColor : background,
 		pointBackgroundColor : background,
-		spanGaps : false,
+		pointRadius : 4,
+		spanGaps : true,
 	};
 
 	var chartData = {

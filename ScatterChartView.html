@@ -263,6 +263,10 @@
 
 						if (chartJsonData != null) {
 							var scatterData = chartJsonData.scatterData;
+							var xMax = chartJsonData.xObj.maxValue;
+							var xMin = chartJsonData.xObj.minValue;
+							var yMax = chartJsonData.yObj.maxValue;
+							var yMin = chartJsonData.yObj.minValue;
 							var titleStr = mType + " " + cType;
 							var pointColor;
 							if (cType == "red_color") {
@@ -275,7 +279,27 @@
 								pointColor = '#000000';
 							}
 
-							drawScatterChart(titleStr, scatterData, "scatter-chart", pointColor);
+							drawScatterChart(titleStr, scatterData, "scatter-chart", pointColor, xMax, xMin, yMax, yMin);
+
+							var originalLineDraw = Chart.controllers.bubble.prototype.draw;
+							Chart.helpers.extend(Chart.controllers.bubble.prototype, {
+								draw : function() {
+									originalLineDraw.apply(this, arguments);
+									var chart = this.chart;
+									if ((xuslValue != null) && (xuslValue.length != 0)) {
+										drawXLine(chart, xuslValue, true, "#FF0000", 0);
+									}
+									if (xlslValue != null && xlslValue.length != 0) {
+										drawXLine(chart, xlslValue, true, "#FF0000", 0);
+									}
+									if (yuslValue != null && yuslValue.length != 0) {
+										drawYLine(chart, yuslValue, true, "#000000", 0);
+									}
+									if (ylslValue != null && ylslValue.length != 0) {
+										drawYLine(chart, ylslValue, true, "#000000", 0);
+									}
+								}
+							});
 						}
 
 					},
@@ -291,7 +315,10 @@
 				});
 			};
 
-			function drawScatterChart(titleStr, chartData, canvasName, pointColor) {
+			function drawScatterChart(titleStr, chartData, canvasName, pointColor, xMax, xMin, yMax, yMin) {
+				var offsetX = (xMax - xMin);
+				var offsetY = (yMax - yMin);
+				var value = parseFloat(xMax) + parseFloat(offsetX);
 				var bubbleData = {
 					datasets : [{
 						label : 'First Dataset',
@@ -300,7 +327,7 @@
 						hoverBackgroundColor : pointColor,
 					}],
 				};
-				
+
 				var options = {
 					responsive : true,
 					title : {
@@ -316,15 +343,14 @@
 					scales : {
 						xAxes : [{
 							ticks : {
-								//suggestedMin : 0.27,
-								//suggestedMax : 0.32,
+								suggestedMin : parseFloat(xMin) - parseFloat(offsetX),
+								suggestedMax : parseFloat(xMax) + parseFloat(offsetX),
 							}
 						}],
 						yAxes : [{
-
 							ticks : {
-								//suggestedMin : 0.29,
-								//suggestedMax : 0.34,
+								suggestedMin : parseFloat(yMin) - parseFloat(offsetY),
+								suggestedMax : parseFloat(yMax) + parseFloat(offsetY),
 							}
 						}]
 					},
@@ -337,12 +363,13 @@
 				};
 
 				var ctx = document.getElementById(canvasName);
+
 				var myChart = new Chart(ctx, config);
 
 			};
 
-			var drawLine = function(chart, index, value, lineDash, lineColor, offset) {
-				if (index) {
+			var drawXLine = function(chart, value, lineDash, lineColor, offset) {
+				if (value) {
 					ctx = chart.chart.ctx;
 					var xaxis = chart.scales['x-axis-0'];
 					var yaxis = chart.scales['y-axis-0'];
@@ -353,11 +380,39 @@
 					}
 					ctx.save();
 					ctx.beginPath();
-					ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top - offset);
+					ctx.moveTo(xaxis.getPixelForValue(value), yaxis.top - offset);
 					ctx.strokeStyle = lineColor;
-					ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
-					var x = xaxis.getPixelForValue(undefined, index);
+					ctx.lineTo(xaxis.getPixelForValue(value), yaxis.bottom);
+
+					var x = xaxis.getPixelForValue(value);
 					var y = yaxis.top;
+					ctx.textAlign = "center";
+					ctx.textBaseline = "bottom";
+					ctx.font = "14px Arial";
+					ctx.fillStyle = lineColor;
+					ctx.fillText(value, x, y - offset);
+					ctx.stroke();
+					ctx.restore();
+				}
+			};
+			var drawYLine = function(chart, value, lineDash, lineColor, offset) {
+				if (value) {
+					ctx = chart.chart.ctx;
+					var xaxis = chart.scales['x-axis-0'];
+					var yaxis = chart.scales['y-axis-0'];
+					if (lineDash) {
+						ctx.setLineDash([5, 5]);
+					} else {
+						ctx.setLineDash([0, 0]);
+					}
+					ctx.save();
+					ctx.beginPath();
+					ctx.moveTo(xaxis.getPixelForValue(xaxis.min), yaxis.getPixelForValue(value));
+					ctx.strokeStyle = lineColor;
+					ctx.lineTo(xaxis.getPixelForValue(xaxis.max), yaxis.getPixelForValue(value));
+
+					var x = xaxis.getPixelForValue(xaxis.max);
+					var y = yaxis.getPixelForValue(value);
 					ctx.textAlign = "center";
 					ctx.textBaseline = "bottom";
 					ctx.font = "14px Arial";
