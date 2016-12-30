@@ -263,49 +263,49 @@
 					success : function(chartJsonData) {
 						// Split timestamp and data into
 						// separate arrays
-
-						if (chartJsonData != null) {
-							var scatterData = chartJsonData.scatterData;
-							var xMax = chartJsonData.xObj.maxValue;
-							var xMin = chartJsonData.xObj.minValue;
-							var yMax = chartJsonData.yObj.maxValue;
-							var yMin = chartJsonData.yObj.minValue;
-							var wsnValues = chartJsonData.wsnList;
-							var titleStr = mType + " " + cType;
-							var pointColor;
-							if (cType == "red_color") {
-								pointColor = '#FF0000';
-							} else if (cType == "green_color") {
-								pointColor = '#00FF00';
-							} else if (cType == "blue_color") {
-								pointColor = '#0000FF';
-							} else {
-								pointColor = '#000000';
-							}
-
-							drawScatterChart(titleStr, scatterData, "scatter-chart", pointColor, xMax, xMin, yMax, yMin, wsnValues);
-
-							var originalLineDraw = Chart.controllers.bubble.prototype.draw;
-							Chart.helpers.extend(Chart.controllers.bubble.prototype, {
-								draw : function() {
-									originalLineDraw.apply(this, arguments);
-									var chart = this.chart;
-									if ((xuslValue != null) && (xuslValue.length != 0)) {
-										drawXLine(chart, xuslValue, true, "#FF0000", 0);
-									}
-									if (xlslValue != null && xlslValue.length != 0) {
-										drawXLine(chart, xlslValue, true, "#FF0000", 0);
-									}
-									if (yuslValue != null && yuslValue.length != 0) {
-										drawYLine(chart, yuslValue, true, "#000000", 0);
-									}
-									if (ylslValue != null && ylslValue.length != 0) {
-										drawYLine(chart, ylslValue, true, "#000000", 0);
-									}
-								}
-							});
+						if (chartJsonData == null) {
+							alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
+							return;
+						}
+						var scatterData = chartJsonData.scatterData;
+						var xMax = chartJsonData.xObj.maxValue;
+						var xMin = chartJsonData.xObj.minValue;
+						var yMax = chartJsonData.yObj.maxValue;
+						var yMin = chartJsonData.yObj.minValue;
+						var wsnValues = chartJsonData.wsnList;
+						var titleStr = mType + " " + cType;
+						var pointColor;
+						if (cType == "red_color") {
+							pointColor = '#FF0000';
+						} else if (cType == "green_color") {
+							pointColor = '#00FF00';
+						} else if (cType == "blue_color") {
+							pointColor = '#0000FF';
+						} else {
+							pointColor = '#000000';
 						}
 
+						drawScatterChart(titleStr, scatterData, "scatter-chart", pointColor, xMax, xMin, yMax, yMin, wsnValues);
+
+						var originalLineDraw = Chart.controllers.bubble.prototype.draw;
+						Chart.helpers.extend(Chart.controllers.bubble.prototype, {
+							draw : function() {
+								originalLineDraw.apply(this, arguments);
+								var chart = this.chart;
+								if ((xuslValue != null) && (xuslValue.length != 0)) {
+									drawXLine(chart, xuslValue, true, "#FF0000", 0);
+								}
+								if (xlslValue != null && xlslValue.length != 0) {
+									drawXLine(chart, xlslValue, true, "#FF0000", 0);
+								}
+								if (yuslValue != null && yuslValue.length != 0) {
+									drawYLine(chart, yuslValue, true, "#000000", 0);
+								}
+								if (ylslValue != null && ylslValue.length != 0) {
+									drawYLine(chart, ylslValue, true, "#000000", 0);
+								}
+							}
+						});
 					},
 					beforeSend : function() {
 						$('#loading').show();
@@ -314,7 +314,7 @@
 						$('#loading').hide();
 					},
 					error : function() {
-						alert("ERROR!!!");
+						alert("網路連線時發生部分問題。請檢查您的網路設定！");
 					}
 				});
 			};
