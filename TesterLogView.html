@@ -55,7 +55,7 @@
 			<a class="navbar-brand" href="#">LACS DashBoard</a>
 			<ul class="user-menu">
 				<li class="dropdown pull-right">
-					<a href="index.html">Logout</a>
+					<a href="javascript:logout()">Logout</a>
 				</li>
 			</ul>
 		</nav>
@@ -118,8 +118,15 @@
 			<!--/.row-->
 		</div>
 		<!--/.main-->
-
+		<script src="js/Utils.js"></script>
 		<script>
+			// Login check
+			var authority = sessionStorage.getItem("authority");
+			if (authority == null) {
+				alert("您還未登入喔~");
+				window.location = "index.html";
+			};
+
 			$(function() {
 				$("#startdatepicker").datepicker({
 					dateFormat : 'yy-mm-dd'
@@ -128,21 +135,17 @@
 					dateFormat : 'yy-mm-dd'
 				});
 			});
-		</script>
-		<script src="js/Utils.js"></script>
-		<script>
-			// global
+
 			function saveData() {
 				var _mType = document.getElementById("modelType").value;
 				var _siteNum = document.getElementById("siteNum").value;
 				var _sTime = document.getElementById("startdatepicker").value;
 				var _eTime = document.getElementById("enddatepicker").value;
-
 				sessionStorage.setItem('mType', _mType);
 				sessionStorage.setItem('siteNum', _siteNum);
 				sessionStorage.setItem('sTime', _sTime);
 				sessionStorage.setItem('eTime', _eTime);
-			}
+			};
 
 
 			window.onload = function() {
@@ -229,7 +232,6 @@
 										"color" : "black"
 									}
 								};
-								;
 							},
 						});
 
@@ -320,8 +322,12 @@
 					stripQuotes : true, // [Boolean], remove containing double quotes (.txt files ONLY), [default: true]
 					separator : ",", // [String] column separator, [default: ","]
 				});
-			}
+			};
+			
+			function logout() {
+				sessionStorage.clear();
+				window.location = "index.html";
+			};
 		</script>
 	</body>
-
 </html>

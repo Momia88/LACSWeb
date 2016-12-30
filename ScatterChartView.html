@@ -50,7 +50,7 @@
 			<a class="navbar-brand" href="#">LACS DashBoard</a>
 			<ul class="user-menu">
 				<li class="dropdown pull-right">
-					<a href="index.html">Logout</a>
+					<a href="javascript:logout()">Logout</a>
 				</li>
 			</ul>
 		</nav>
@@ -123,7 +123,16 @@
 			<!--/.row-->
 		</div>
 		<!--/.main-->
+		<script src="js/ChartConfig.js"></script>
+		<script src="js/Utils.js"></script>
 		<script type="text/javascript">
+			// Login check
+			var authority = sessionStorage.getItem("authority");
+			if (authority == null) {
+				alert("您還未登入喔~");
+				window.location = "index.html";
+			}
+
 			//donwload pdf from original canvas
 			function downloadPDF() {
 				var canvas = document.querySelector('#bar-chart');
@@ -140,8 +149,6 @@
 
 			//add event listener to 2nd button
 			document.getElementById('download-pdf').addEventListener("click", downloadPDF);
-		</script>
-		<script>
 			$(function() {
 				$("#startdatepicker").datepicker({
 					dateFormat : 'yy-mm-dd'
@@ -150,11 +157,7 @@
 					dateFormat : 'yy-mm-dd'
 				});
 			});
-		</script>
-		<script src="js/ChartConfig.js"></script>
-		<script src="js/Utils.js"></script>
-		<script src="js/bubbleChart.js"></script>
-		<script>
+
 			function saveData() {
 				var _mType = document.getElementById("modelType").value;
 				var _cType = document.getElementById("chartType").value;
@@ -267,6 +270,7 @@
 							var xMin = chartJsonData.xObj.minValue;
 							var yMax = chartJsonData.yObj.maxValue;
 							var yMin = chartJsonData.yObj.minValue;
+							var wsnValues = chartJsonData.wsnList;
 							var titleStr = mType + " " + cType;
 							var pointColor;
 							if (cType == "red_color") {
@@ -279,7 +283,7 @@
 								pointColor = '#000000';
 							}
 
-							drawScatterChart(titleStr, scatterData, "scatter-chart", pointColor, xMax, xMin, yMax, yMin);
+							drawScatterChart(titleStr, scatterData, "scatter-chart", pointColor, xMax, xMin, yMax, yMin, wsnValues);
 
 							var originalLineDraw = Chart.controllers.bubble.prototype.draw;
 							Chart.helpers.extend(Chart.controllers.bubble.prototype, {
@@ -315,7 +319,7 @@
 				});
 			};
 
-			function drawScatterChart(titleStr, chartData, canvasName, pointColor, xMax, xMin, yMax, yMin) {
+			function drawScatterChart(titleStr, chartData, canvasName, pointColor, xMax, xMin, yMax, yMin, wsnValues) {
 				var offsetX = (xMax - xMin);
 				var offsetY = (yMax - yMin);
 				var value = parseFloat(xMax) + parseFloat(offsetX);
@@ -353,6 +357,21 @@
 								suggestedMax : parseFloat(yMax) + parseFloat(offsetY),
 							}
 						}]
+					},
+					tooltips : {
+						enabled : true,
+						mode : 'single',
+						callbacks : {
+							label : function(tooltipItems, data) {
+								var str = "數值:(" + tooltipItems.xLabel + "," + tooltipItems.yLabel + ")";
+								return str;
+							},
+							afterLabel : function(tooltipItems, data) {
+								var str = "";
+								str = "工單號: " + wsnValues[tooltipItems.index] + "\n";
+								return str;
+							},
+						}
 					},
 				};
 
@@ -423,8 +442,10 @@
 				}
 			};
 
+			function logout() {
+				sessionStorage.clear();
+				window.location = "index.html";
+			};
 		</script>
-
 	</body>
-
 </html>

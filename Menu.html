@@ -7,7 +7,7 @@
 		<a href="ScatterChartView.html" onclick="clearSesson()"><img class="glyph" alt=""
 		src="img/chart-scatter-icon.png">色點分佈圖</a>
 	</li>
-		<li>
+	<li>
 		<a href="LineChartView.html" onclick="clearSesson()"><img class="glyph" alt=""
 		src="img/chart-line-icon.png">趨勢圖</a>
 	</li>
@@ -15,13 +15,24 @@
 		<a href="TesterLogView.html" onclick="clearSesson()"><img class="glyph" alt=""
 		src="img/excel-icon.png">測試報表</a>
 	</li>
-	<li>
+	<li id="usermanage">
 		<a href="User.html" onclick="clearSesson()"><img class="glyph" alt=""
 		src="img/users-icon.png">使用者管理</a>
 	</li>
 </ul>
 <script>
-	function clearSesson(){
+	var auth = sessionStorage.getItem('authority');
+	if (auth != 8) {
+		var element = document.getElementById("usermanage");
+		element.style.display = "none";
+	}
+	function clearSesson() {
+		var userId = sessionStorage.getItem('userId');
+		var userName = sessionStorage.getItem('userName');
+		var authority = sessionStorage.getItem('authority');
 		sessionStorage.clear();
+		sessionStorage.setItem('userId', userId);
+		sessionStorage.setItem('userName', userName);
+		sessionStorage.setItem('authority', authority);
 	}
 </script>

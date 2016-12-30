@@ -25,7 +25,7 @@
 			<a class="navbar-brand" href="#">LACS DashBoard</a>
 			<ul class="user-menu">
 				<li class="dropdown pull-right">
-					<a href="index.html">Logout</a>
+					<a href="javascript:logout()">Logout</a>
 				</li>
 			</ul>
 		</nav>
@@ -49,12 +49,12 @@
 							使用者列表
 						</div>
 						<div class="panel-body" style="float: right">
-							<button  onclick="disp_prompt()">
+							<button  onclick="add_user();">
 								新增使用者
 							</button>
 						</div>
 						<div class="panel-body">
-							<table id="tb_report"></table>
+							<table id="user_table"></table>
 						</div>
 					</div>
 				</div>
@@ -64,109 +64,182 @@
 			<!--/.row-->
 		</div>
 		<!--/.main-->
-
 		<script>
-			var statesdemo = {
-				state0 : {
+			// Login check
+			var userAuth = sessionStorage.getItem("authority");
+			if (userAuth == null) {
+				alert("您還未登入喔~");
+				window.location = "index.html";
+			};
+
+			window.onload = function() {
+				$('#user_table').bootstrapTable({
+					showExport : true, //是否顯示導出
+					exportDataType : "basic", //basic', 'all', 'selected'.
+					columns : [{
+						field : 'userId',
+						title : '帳號',
+						sortable : true,
+						editable : true,
+						align : 'center'
+					}, {
+						field : 'userName',
+						title : '姓名',
+						sortable : true,
+						editable : true,
+						align : 'center'
+					}, {
+						field : 'authority',
+						title : '權限',
+						sortable : true,
+						editable : true,
+						align : 'center'
+					}, {
+						field : 'operate',
+						title : '編輯',
+						align : 'center',
+						events : operateEvents,
+						formatter : operateFormatter,
+					}],
+					data : [],
+					rowStyle : function rowStyle(row, index) {
+						if (row.authority == "8") {
+							row.authority = "管理者";
+						} else {
+							row.authority = "使用者";
+						};
+						return row.authority;
+					},
+				});
+				getUser();
+			};
+
+			function addUserCallback(e, v, m, f) {
+				if (v == 2) {
+					if (f.uid == "") {
+						m.children('#uid').css("border", "solid #ff0000 1px");
+						alert("帳號不得為空！");
+						return false;
+					}
+					if (f.uname == "") {
+						m.children('#uname').css("border", "solid #ff0000 1px");
+						alert("姓名不得為空！");
+						return false;
+					}
+					var uid = f.uid;
+					var name = f.uname;
+					var auth = f.utype;
+					addUser(uid, name, auth);
+				}
+				$.prompt.close();
+			};
+
+			function add_user(uid, uname, authority) {
+				if (userAuth != 8) {
+					alert("您沒有權限喔！");
+					return;
+				}
+				var html = '<label>帳號 :  </label> <input type="text" id="uid" name="uid" value=""> <br />';
+				html += '<label>姓名 :  </label> <input type="text" id="uname" name="uname" value=""> <br />' + '<BR />';
+				html += '<input type="radio" id="utype" name="utype" value=1 checked="checked"> <label>使用者</label> <br />';
+				html += '<input type="radio" id="utype" name="utype" value=8> <label>管理者</label>';
+				$.prompt(html, {
 					title : '新增使用者',
-					html : '<label>帳號 <input type="text" id="uid" value=""></label><br />' + '<label>姓名 <input type="text" id="uname" value=""></label><br />' + '<BR />' + '<label><input type="radio" id="utype1" value="admin"> 管理員</label><br />' + '<label><input type="radio" id="utype2" value="user"> 使用者</label>',
+					submit : addUserCallback,
 					buttons : {
-						Done : 1
+						Cancel : 1,
+						Done : 2
 					},
 					focus : 1,
-					submit : function(e, v, m, f) {
-						e.preventDefault();
-						$.prompt.close();
-						var uid = document.getElementById('uid').value;
-						var name = document.getElementById('uname').value;
-						if (document.getElementById('utype1').checked) {
-							var utype = document.getElementById('utype1').value;
-						} else {
-							var utype = document.getElementById('utype2').value;
-						}
-
-						alert(uid + '-' + name + '-' + utype);
-
-					}
-				},
+				});
 			};
-			function disp_prompt() {
-				$.prompt(statesdemo);
-			}
-		</script>
-		<script>
+
+			function editUserCallback(e, v, m, f) {
+				if (v == 2) {
+					if (f.uname == "") {
+						m.children('#uname').css("border", "solid #ff0000 1px");
+						alert("姓名不得為空！");
+						return false;
+					}
+					var uid = f.uid;
+					var name = f.uname;
+					var auth = f.utype;
+					updateUser(uid, name, auth);
+				}
+				$.prompt.close();
+			};
+
+			function edit_user(uid, uname, authority) {
+				var html = '<label>帳號 : ' + uid + '</label><input type="hidden" id="uid" name="uid" value=' + uid + '> <br />';
+				html += '<label>姓名 :  </label> <input type="text" id="uname" name="uname" value=' + uname + '> <br />' + '<BR />';
+				if (authority == "管理者") {
+					html += '<input type="radio" id="utype" name="utype" value=1> <label>使用者</label> <br />';
+					html += '<input type="radio" id="utype" name="utype" value=8 checked="checked"> <label>管理者</label>';
+				} else {
+					html += '<input type="radio" id="utype" name="utype" value=1 checked="checked"> <label>使用者</label> <br />';
+					html += '<input type="radio" id="utype" name="utype" value=8> <label>管理者</label>';
+				}
+				$.prompt(html, {
+					title : '編輯使用者',
+					submit : editUserCallback,
+					buttons : {
+						Cancel : 1,
+						Done : 2
+					},
+					focus : 1,
+				});
+			};
+
 			window.operateEvents = {
 				'click .remove' : function(e, value, row) {
+					if (userAuth != 8) {
+						alert("您沒有權限喔！");
+						return;
+					}
 					var r = confirm("確定要刪除使用者: " + row.userName);
 					if (r == true) {
-						tableRefresh();
-						alert("You pressed OK!");
+						deleteUser(row.userId);
 					}
 				},
-				// 'click .edit' : function(e, value, row) {
-				// alert('You click edit action, row: ' + JSON.stringify(row));
-				// },
+				'click .edit' : function(e, value, row) {
+					if (userAuth != 8) {
+						alert("您沒有權限喔！");
+						return;
+					}
+					edit_user(row.userId, row.userName, row.authority);
+				},
 			};
 
 			function operateFormatter(value, row, index) {
-				//return ['<div class="pull-right">', '<a class="edit" href="javascript:void(0)" title="Edit">', '<i class="glyphicon glyphicon-edit"></i>', '</a>  ', '<a class="remove" href="javascript:void(0)" title="Remove">', '<i class="glyphicon glyphicon-remove"></i>', '</a>', '</div>'].join('');
-				return ['<a class="remove" href="javascript:void(0)" title="Remove">', '<i class="glyphicon glyphicon-remove"></i>', '</a>', '</div>'].join('');
-
+				return ['<div class="pull-center">', '<a class="edit" href="javascript:void(0)" title="Edit">', '<i class="glyphicon glyphicon-edit"></i>', '</a>  ', '<a class="remove" href="javascript:void(0)" title="Remove">', '<i class="glyphicon glyphicon-remove"></i>', '</a>', '</div>'].join('');
+				//return ['<a class="remove" href="javascript:void(0)" title="Remove">', '<i class="glyphicon glyphicon-remove"></i>', '</a>', '</div>'].join('');
 			};
 
-			jsonData = $.ajax({
-				url : serverIP + '/service/userlist',
-				type : "GET",
-				dataType : 'json',
-				success : function(jsonData) {
-					// Split timestamp and data into
-					// separate arrays
-					if (jsonData == null) {
-						alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
-						return;
+			function getUser() {
+				jsonData = $.ajax({
+					url : serverIP + '/service/userlist',
+					type : "GET",
+					dataType : 'json',
+					success : function(jsonData) {
+						// Split timestamp and data into
+						// separate arrays
+						if (jsonData == null) {
+							alert("沒有資料喔！請確認一下查詢時間，或連絡系統管理員。");
+							return;
+						}
+						$('#user_table').bootstrapTable("load", jsonData);
+					},
+					beforeSend : function() {
+						$('#loading').show();
+					},
+					complete : function() {
+						$('#loading').hide();
+					},
+					error : function() {
+						alert("連線失敗，請檢查網路狀態或冾管理人員。");
 					}
-
-					$('#tb_report').bootstrapTable({
-						showExport : true, //是否顯示導出
-						exportDataType : "basic", //basic', 'all', 'selected'.
-						columns : [{
-							field : 'userId',
-							title : '帳號',
-							sortable : true,
-							editable : true,
-							align : 'center'
-						}, {
-							field : 'userName',
-							title : '姓名',
-							sortable : true,
-							editable : true,
-							align : 'center'
-						}, {
-							field : 'authority',
-							title : '權限',
-							sortable : true,
-							editable : true,
-							align : 'center'
-						}, {
-							field : 'operate',
-							title : '刪除',
-							align : 'center',
-							events : operateEvents,
-							formatter : operateFormatter,
-						}],
-						data : jsonData,
-					});
-				},
-				beforeSend : function() {
-					$('#loading').show();
-				},
-				complete : function() {
-					$('#loading').hide();
-				},
-				error : function() {
-					alert("連線失敗，請檢查網路狀態或冾管理人員。");
-				}
-			});
+				});
+			};
 
 			function addUser(userId, userName, authority) {
 				jsonData = $.ajax({
@@ -182,13 +255,13 @@
 						// Split timestamp and data into
 						// separate arrays
 						alert(jsonData);
+						getUser();
 					},
 					beforeSend : function() {
 						$('#loading').show();
 					},
 					complete : function() {
 						$('#loading').hide();
-						tableRefresh();
 					},
 					error : function() {
 						alert("連線有問題，請冾管理人員!!");
@@ -196,20 +269,62 @@
 				});
 			};
 
-			function addUserInfo() {
-				$('#tb_report').bootstrapTable('refresh');
+			function deleteUser(userId) {
+				jsonData = $.ajax({
+					url : serverIP + '/service/deluser',
+					type : "POST",
+					dataType : 'text',
+					data : {
+						userId : userId,
+					},
+					success : function(jsonData) {
+						alert(jsonData);
+						getUser();
+					},
+					beforeSend : function() {
+						$('#loading').show();
+					},
+					complete : function() {
+						$('#loading').hide();
+					},
+					error : function() {
+						alert("連線有問題，請冾管理人員!!");
+					}
+				});
 			};
 
-			function tableRefresh() {
-				var sStr = prompt("梦之都的网址是什么？", "请在这里输入");
-				if (sStr != null && sStr != "") {
-					alert("你输入的是：" + sStr);
-				} else {
-					alert("你什么也没有输入");
-				}
+			function updateUser(userId, userName, authority) {
+				jsonData = $.ajax({
+					url : serverIP + '/service/updateuser',
+					type : "POST",
+					dataType : 'text',
+					data : {
+						userId : userId,
+						userName : userName,
+						authority : authority,
+					},
+					success : function(jsonData) {
+						// Split timestamp and data into
+						// separate arrays
+						alert(jsonData);
+						getUser();
+					},
+					beforeSend : function() {
+						$('#loading').show();
+					},
+					complete : function() {
+						$('#loading').hide();
+					},
+					error : function() {
+						alert("連線有問題，請冾管理人員!!");
+					}
+				});
+			};
+
+			function logout() {
+				sessionStorage.clear();
+				window.location = "index.html";
 			};
 		</script>
-
 	</body>
-
 </html>

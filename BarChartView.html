@@ -50,7 +50,7 @@
 			<a class="navbar-brand" href="#">LACS DashBoard</a>
 			<ul class="user-menu">
 				<li class="dropdown pull-right">
-					<a href="index.html">Logout</a>
+					<a href="javascript:logout()">Logout</a>
 				</li>
 			</ul>
 		</nav>
@@ -102,10 +102,8 @@
 						<label>下限:</label>
 						<input type="text" id="lslValue">
 						<label>標準:</label>
-						<input
-						type="text" id="specValue">
-						<input onclick="saveData()"
-						type="submit" id="sumitBtn" value="提交" />
+						<input type="text" id="specValue">
+						<input onclick="saveData()" type="submit" id="sumitBtn" value="提交" />
 					</form>
 				</div>
 			</div>
@@ -147,7 +145,17 @@
 			<!--/.row-->
 		</div>
 		<!--/.main-->
+		<script src="js/ChartConfig.js"></script>
+		<script src="js/Utils.js"></script>
+
 		<script type="text/javascript">
+			// Login check
+			var authority = sessionStorage.getItem("authority");
+			if (authority == null) {
+				alert("您還未登入喔~");
+				window.location = "index.html";
+			};
+			
 			//donwload pdf from original canvas
 			function downloadPDF() {
 				var canvas = document.querySelector('#bar-chart');
@@ -160,12 +168,11 @@
 				doc.text(15, 15, "Bar Chart");
 				doc.addImage(canvasImg, 'PNG', 10, 10, 280, 150);
 				doc.save('canvas.pdf');
-			}
+			};
 
 			//add event listener to 2nd button
 			document.getElementById('download-pdf').addEventListener("click", downloadPDF);
-		</script>
-		<script>
+
 			$(function() {
 				$("#startdatepicker").datepicker({
 					dateFormat : 'yy-mm-dd'
@@ -174,32 +181,9 @@
 					dateFormat : 'yy-mm-dd'
 				});
 			});
-		</script>
-		<script src="js/ChartConfig.js"></script>
-		<script src="js/Utils.js"></script>
-		<script>
-			function saveData() {
-				var _mType = document.getElementById("modelType").value;
-				var _cType = document.getElementById("chartType").value;
-				var _sTime = document.getElementById("startdatepicker").value;
-				var _eTime = document.getElementById("enddatepicker").value;
-				// 平均線位置
-				var _uslValue = document.getElementById("uslValue").value;
-				var _lslValue = document.getElementById("lslValue").value;
-				var _specValue = document.getElementById("specValue").value;
-
-				sessionStorage.setItem('mType', _mType);
-				sessionStorage.setItem('cType', _cType);
-				sessionStorage.setItem('sTime', _sTime);
-				sessionStorage.setItem('eTime', _eTime);
-				sessionStorage.setItem('uslValue', _uslValue);
-				sessionStorage.setItem('lslValue', _lslValue);
-				sessionStorage.setItem('specValue', _specValue);
-
-			}
-
 
 			window.onload = function() {
+
 				// init params
 				var mType = sessionStorage.getItem("mType");
 				var cType = sessionStorage.getItem("cType");
@@ -371,7 +355,26 @@
 				});
 			};
 
-			var drawLine = function(chart, index, value, lineDash, lineColor, offset) {
+			function saveData() {
+				var _mType = document.getElementById("modelType").value;
+				var _cType = document.getElementById("chartType").value;
+				var _sTime = document.getElementById("startdatepicker").value;
+				var _eTime = document.getElementById("enddatepicker").value;
+				// 平均線位置
+				var _uslValue = document.getElementById("uslValue").value;
+				var _lslValue = document.getElementById("lslValue").value;
+				var _specValue = document.getElementById("specValue").value;
+
+				sessionStorage.setItem('mType', _mType);
+				sessionStorage.setItem('cType', _cType);
+				sessionStorage.setItem('sTime', _sTime);
+				sessionStorage.setItem('eTime', _eTime);
+				sessionStorage.setItem('uslValue', _uslValue);
+				sessionStorage.setItem('lslValue', _lslValue);
+				sessionStorage.setItem('specValue', _specValue);
+			};
+
+			function drawLine(chart, index, value, lineDash, lineColor, offset) {
 				if (index) {
 					var ctx = chart.chart.ctx;
 					var xaxis = chart.scales['x-axis-0'];
@@ -397,7 +400,11 @@
 					ctx.restore();
 				}
 			};
+
+			function logout() {
+				sessionStorage.clear();
+				window.location = "index.html";
+			};
 		</script>
 	</body>
-
 </html>

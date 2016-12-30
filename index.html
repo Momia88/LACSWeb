@@ -7,6 +7,7 @@
 
 		<link href="css/bootstrap.css" rel="stylesheet">
 		<link href="css/styles.css" rel="stylesheet">
+		<link href="css/jquery-ui.css" rel="stylesheet">
 		<link href="css/loading.css" rel="stylesheet">
 
 		<!--[if lt IE 9]>
@@ -15,10 +16,11 @@
 		<![endif]-->
 		<script src="js/jquery-3.1.1.min.js"></script>
 		<script src="js/Variables.js"></script>
-
+		<script src="js/bootstrap.min.js"></script>
 	</head>
 
 	<body>
+		<div id="loading" style="display: none"></div>
 		<div class="row" align="center">
 			<p style="font-size: 36px">
 				Log Analysis Cloud System
@@ -33,69 +35,72 @@
 					</div>
 					<div class="panel-body">
 						<fieldset>
-							<div class="form-group">
-								<input  id="userid" class="form-control" placeholder="Account" name="userid" type="email" autofocus="">
-							</div>
-							<div class="form-group">
-								<input id="passwd" class="form-control" placeholder="Password" name="passwd" type="password" value="">
-							</div>
-							<div align="center">
-								<button id="sumitBtn" onclick="validateForm()">
-									Login
-								</button>
-							</div>
+							<form action="BarChartView.html" method="post">
+								<div class="form-group">
+									<input  id="userid" class="form-control" placeholder="Account" name="userid" type="text" autofocus="">
+								</div>
+								<div class="form-group">
+									<input id="passwd" class="form-control" placeholder="Password" name="passwd" type="password" value="">
+								</div>
+								<input onclick="return validateForm();" type="submit" id="sumitBtn" value="提交" />
+							</form>
 						</fieldset>
 					</div>
 				</div>
 			</div><!-- /.col-->
 		</div><!-- /.row -->
 
-		<script src="js/jquery-3.1.1.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-
 		<script>
 			var count = 0;
 			function validateForm() {
 				if (window.sessionStorage == null) {
 					alert("Browser not support HTML 5 !!");
-					return;
+					return "false";
 				}
 				var userid = document.getElementById("userid").value;
 				var passwd = document.getElementById("passwd").value;
-
-				jsonData = $.ajax({
+				var result = false;
+				$.ajax({
 					url : serverIP + '/service/auth',
 					type : "POST",
 					data : {
 						userId : userid,
 						passwd : passwd,
 					},
-					dataType : 'text',
+					dataType : 'json',
 					success : function(chartData) {
-						if (chartData == "Y") {
-							window.location = "BarChartView.html";
+						var userInfo = chartData.userInfo;
+						if (chartData.auth) {
+							sessionStorage.setItem('userId', userInfo.userId);
+							sessionStorage.setItem('userName', userInfo.userName);
+							sessionStorage.setItem('authority', userInfo.authority);
+							result = true;
 						} else {
-							count++;
-							alert("帳號密碼錯誤！ " + count + " 次");
+							if (chartData.errType == 1) {
+								alert(chartData.msg);
+							} else if (chartData.errType == 2) {
+								count++;
+								alert(chartData.msg + " 第" + count + "次");
+							} else {
+								alert(chartData.msg);
+							}
+							result = false;
 						}
-						return chartData;
 					},
-
 					beforeSend : function() {
 						$('#loading').show();
 					},
-
 					complete : function() {
 						$('#loading').hide();
 					},
-
 					error : function() {
-						alert("NetWork Error!");
-						return false;
-					}
+						alert("NetWork Error!!");
+						result = false;
+					},
+					async : false,
 				});
+				return result;
 			}
 		</script>
 	</body>
-
 </html>

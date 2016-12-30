@@ -50,7 +50,7 @@
 			<a class="navbar-brand" href="#">LACS DashBoard</a>
 			<ul class="user-menu">
 				<li class="dropdown pull-right">
-					<a href="index.html">Logout</a>
+					<a href="javascript:logout()">Logout</a>
 				</li>
 			</ul>
 		</nav>
@@ -118,7 +118,16 @@
 			<!--/.row-->
 		</div>
 		<!--/.main-->
+		<script src="js/ChartConfig.js"></script>
+		<script src="js/Utils.js"></script>
 		<script type="text/javascript">
+			// Login check
+			var authority = sessionStorage.getItem("authority");
+			if (authority == null) {
+				alert("您還未登入喔~");
+				window.location = "index.html";
+			}
+
 			//donwload pdf from original canvas
 			function downloadPDF() {
 				var canvas = document.querySelector('#line-chart');
@@ -135,8 +144,7 @@
 
 			//add event listener to 2nd button
 			document.getElementById('download-pdf').addEventListener("click", downloadPDF);
-		</script>
-		<script>
+
 			$(function() {
 				$("#startdatepicker").datepicker({
 					dateFormat : 'yy-mm-dd'
@@ -145,10 +153,7 @@
 					dateFormat : 'yy-mm-dd'
 				});
 			});
-		</script>
-		<script src="js/ChartConfig.js"></script>
-		<script src="js/Utils.js"></script>
-		<script>
+
 			function saveData() {
 				var _mType = document.getElementById("modelType").value;
 				var _cType = document.getElementById("chartType").value;
@@ -258,7 +263,11 @@
 					}
 				});
 			};
+
+			function logout() {
+				sessionStorage.clear();
+				window.location = "index.html";
+			};
 		</script>
 	</body>
-
 </html>
