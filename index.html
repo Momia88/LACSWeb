@@ -52,14 +52,20 @@
 
 		<script>
 			var count = 0;
+
 			function validateForm() {
 				if (window.sessionStorage == null) {
 					alert("Browser not support HTML 5 !!");
-					return "false";
+					return false;
 				}
 				var userid = document.getElementById("userid").value;
 				var passwd = document.getElementById("passwd").value;
+				if (userid.trim().length == 0 || passwd.trim().length == 0) {
+					alert("帳號密碼不得為空");
+					return false;
+				}
 				var result = false;
+
 				$.ajax({
 					url : serverIP + '/service/auth',
 					type : "POST",
