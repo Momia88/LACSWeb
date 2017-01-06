@@ -28,8 +28,8 @@
 			canvas {
 				background-color: #FFFFFF;
 				background: #FFFFFF;
-				height: "200";
-				width: "600";
+				height: 200px;
+				width: 600px;
 			}
 
 			input {
@@ -38,6 +38,20 @@
 				padding-right: 10px;
 				padding-top: 5px;
 				padding-bottom: 5px;
+			}
+
+			label {
+				margin: 5px;
+			}
+
+			#siteNum {
+				width: 100px;
+				height: 30px;
+			}
+
+			#chartType {
+				width: 200px;
+				height: 30px;
 			}
 		</style>
 
@@ -77,14 +91,20 @@
 						<br />
 						<label>Model Type:</label>
 						<input type="text" id="modelType" required="required">
-						<label>Site:</label>
-						<input type="text" id="siteNum"required="required">
+						<label>Site: </label>
+						<select id="siteNum" required="required">
+							<option value="1">FT 1-1</option>
+							<option value="2" selected="selected">FT 1-2</option>
+							<option value="3">FT 2-1</option>
+							<option value="4">FT 2-2</option>
+							<option value="100">MTBF</option>
+							<option value="200">ABC</option>
+						</select>
 						<label>Serial Num:</label>
 						<input type="text" id="serialNum"required="required">
 						<br />
 						<label>Chart Type :</label>
-						<select id="chartType"
-						required="required">
+						<select id="chartType" required="required">
 							<option value="fan-info">Fan Info</option>
 							<option value="fan-pwm">Fan PWM</option>
 							<option value="blue-ld-driverboard-1">Blue LD Driver Board #1</option>

@@ -44,6 +44,16 @@
 				padding-top: 5px;
 				padding-bottom: 5px;
 			}
+			
+			label {
+				margin: 5px;
+			}
+
+			#siteNum {
+				width: 100px;
+				height: 30px;
+			}
+
 		</style>
 
 	</head>
@@ -83,7 +93,14 @@
 						<label>Model Type:</label>
 						<input type="text" id="modelType">
 						<label>Site:</label>
-						<input type="text" id="siteNum"required="required">
+						<select id="siteNum" required="required">
+							<option value="1">FT 1-1</option>
+							<option value="2" selected="selected">FT 1-2</option>
+							<option value="3">FT 2-1</option>
+							<option value="4">FT 2-2</option>
+							<option value="100">MTBF</option>
+							<option value="200">ABC</option>
+						</select>
 						<input onclick="saveData()" type="submit" id="sumitBtn" value="提交" />
 					</form>
 				</div>
@@ -146,7 +163,6 @@
 				sessionStorage.setItem('sTime', _sTime);
 				sessionStorage.setItem('eTime', _eTime);
 			};
-
 
 			window.onload = function() {
 				// init params
@@ -323,7 +339,7 @@
 					separator : ",", // [String] column separator, [default: ","]
 				});
 			};
-			
+
 			function logout() {
 				sessionStorage.clear();
 				window.location = "index.html";
