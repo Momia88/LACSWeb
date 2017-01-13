@@ -152,7 +152,7 @@
 			function downloadPDF() {
 				var canvas = document.querySelector('#line-chart');
 				//creates image
-				var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
+				var canvasImg = canvas.toDataURL("image/png", 1.0);
 
 				//creates PDF from img
 				var doc = new jsPDF('landscape');
